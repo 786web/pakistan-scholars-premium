@@ -85,3 +85,19 @@ admissionForm.addEventListener("submit", (event) => {
     });
   }
 })();
+
+const resultSearch = document.getElementById("resultSearch");
+if (resultSearch) {
+  const resultRows = Array.from(document.querySelectorAll("#resultsTable tbody tr"));
+  const resultCount = document.getElementById("resultCount");
+  resultSearch.addEventListener("input", () => {
+    const query = resultSearch.value.trim().toLocaleLowerCase();
+    let visible = 0;
+    resultRows.forEach((row) => {
+      const match = row.textContent.toLocaleLowerCase().includes(query);
+      row.hidden = !match;
+      if (match) visible += 1;
+    });
+    resultCount.textContent = visible + (visible === 1 ? " record" : " records");
+  });
+}
