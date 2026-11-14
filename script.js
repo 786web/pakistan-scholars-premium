@@ -42,3 +42,46 @@ admissionForm.addEventListener("submit", (event) => {
   const whatsappUrl = "https://wa.me/923001560822?text=" + encodeURIComponent(message);
   window.open(whatsappUrl, "_blank", "noopener,noreferrer");
 });
+
+// Lightweight premium motion: reveal on scroll and gentle 3D card tilt.
+(() => {
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (reduceMotion) return;
+
+  const revealTargets = document.querySelectorAll(
+    ".intro-copy, .intro-visual, .values-grid > div, .section-heading, .campus-card, .feature-item, .result-feature, .archive-row, .life-card, .admissions-grid > div, .admission-form, .contact-inner"
+  );
+
+  if ("IntersectionObserver" in window) {
+    const revealObserver = new IntersectionObserver((entries, observer) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("is-visible");
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: "0px 0px -35px 0px" });
+
+    revealTargets.forEach((element) => {
+      element.classList.add("motion-reveal");
+      revealObserver.observe(element);
+    });
+  }
+
+  // Pointer-only tilt: disabled on touch screens for comfortable mobile use.
+  if (window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
+    document.querySelectorAll(".campus-card, .life-card").forEach((card) => {
+      card.addEventListener("pointermove", (event) => {
+        const rect = card.getBoundingClientRect();
+        const x = (event.clientX - rect.left) / rect.width;
+        const y = (event.clientY - rect.top) / rect.height;
+        const rotateY = (x - 0.5) * 5;
+        const rotateX = (0.5 - y) * 5;
+        card.style.transform = `perspective(900px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-3px)`;
+      });
+      card.addEventListener("pointerleave", () => {
+        card.style.transform = "";
+      });
+    });
+  }
+})();
