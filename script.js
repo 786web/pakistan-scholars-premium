@@ -101,3 +101,50 @@ if (resultSearch) {
     resultCount.textContent = visible + (visible === 1 ? " record" : " records");
   });
 }
+
+
+// Supabase connection: public website reads only published school results.
+// The publishable key is intended for browser use; database RLS protects every row.
+(async () => {
+  const SUPABASE_URL = "https://vuptztqeqblngbpflqzt.supabase.co";
+  const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_fglLwYtA9GpLJdkwRc90Jw_dNw7TtK8";
+
+  try {
+    const { createClient } = await import("https://esm.sh/@supabase/supabase-js@2.119.0");
+    const schoolDb = createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+    const { data, error } = await schoolDb
+      .from("school_results")
+      .select("year, student_name, board_roll_no, marks_obtained, total_marks")
+      .eq("is_published", true)
+      .order("year", { ascending: true })
+      .order("student_name", { ascending: true });
+
+    if (error) throw error;
+    if (!Array.isArray(data) || data.length === 0) return;
+
+    const tbody = document.querySelector("#resultsTable tbody");
+    const resultCount = document.getElementById("resultCount");
+    if (!tbody) return;
+
+    tbody.replaceChildren();
+    data.forEach((record) => {
+      const row = document.createElement("tr");
+      [
+        record.year,
+        record.student_name,
+        record.board_roll_no || "—",
+        record.marks_obtained + "/" + record.total_marks
+      ].forEach((value) => {
+        const cell = document.createElement("td");
+        cell.textContent = String(value);
+        row.appendChild(cell);
+      });
+      tbody.appendChild(row);
+    });
+
+    if (resultCount) resultCount.textContent = data.length + " records · live database";
+    if (resultSearch) resultSearch.dispatchEvent(new Event("input"));
+  } catch (error) {
+    console.warn("School results database is temporarily unavailable; showing the saved page records.", error);
+  }
+})();
