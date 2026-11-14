@@ -21,3 +21,19 @@
 }
 @media (prefers-reduced-motion: reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
 @media (hover:none){.campus-card:hover,.life-card:hover,.brand:hover .brand-mark{transform:none}}
+
+/* Searchable annual result archive */
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.results-tools{display:flex;align-items:center;justify-content:space-between;gap:15px;margin:22px 0 12px}
+.results-tools input{width:min(100%,420px);height:46px;border:1px solid #d9ddd5;background:#fff;padding:0 15px;font:inherit;font-size:13px;color:var(--ink);outline:none}
+.results-tools input:focus{border-color:#a98443;box-shadow:0 0 0 3px #a9844318}
+#resultCount{font-size:11px;color:var(--muted);white-space:nowrap}
+.results-table-wrap{overflow-x:auto;background:#fff;border:1px solid #e1e3dc}
+.results-table{width:100%;border-collapse:collapse;min-width:560px;text-align:left}
+.results-table th{background:#092c24;color:#fff;padding:15px 17px;font-size:10px;letter-spacing:.08em;text-transform:uppercase}
+.results-table td{padding:13px 17px;border-bottom:1px solid #eceee8;font-size:12px;color:#3f4e46}
+.results-table tbody tr:nth-child(even){background:#faf9f5}
+.results-table tbody tr:hover{background:#f0eadc}
+.results-table td:first-child{font-weight:800;color:#9a793d}
+.results-note{font-size:10px;line-height:1.7;color:#7b857e;margin-top:12px}
+@media(max-width:600px){.results-tools{align-items:stretch;flex-direction:column}.results-tools input{width:100%}.results-table th,.results-table td{padding:12px 13px}}
