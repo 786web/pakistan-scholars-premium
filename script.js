@@ -203,7 +203,7 @@ if (resultSearch) {
   if(!data?.logo_path)return;
   const base=client.storage.from("school-gallery-public").getPublicUrl(data.logo_path).data.publicUrl;
   const url=base+(base.includes("?")?"&":"?")+"v="+encodeURIComponent(data.updated_at||Date.now());
-  document.querySelectorAll(".brand-mark, .founder-monogram").forEach(mark=>{
+  document.querySelectorAll(".brand-mark").forEach(mark=>{
    const img=document.createElement("img");
    img.src=url;img.alt="Pakistan Scholars High School logo";img.loading="eager";img.decoding="async";
    img.onerror=()=>{console.warn("Uploaded school logo could not be displayed:",url);};
