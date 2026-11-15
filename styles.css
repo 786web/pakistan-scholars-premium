@@ -272,3 +272,26 @@
  .preview-hero .hero-note{margin-top:30px}
  .campus-section .campus-image{height:210px}
 }
+
+/* School logo: clean fit with subtle, accessible motion */
+.brand-mark{
+  width:50px;height:50px;flex:0 0 50px;
+  display:grid;place-items:center;overflow:visible;
+  border:1px solid #C8D6E8;border-radius:11px;
+  background:#fff;color:#123B70;
+  box-shadow:0 5px 14px rgba(18,59,112,.10);
+  transition:transform .28s ease,box-shadow .28s ease;
+}
+.brand-mark img{
+  display:block;width:100%;height:100%;max-width:100%;max-height:100%;
+  object-fit:contain;object-position:center;padding:4px;border-radius:10px;
+  animation:schoolLogoFloat 4.8s ease-in-out infinite;transform-origin:center;
+}
+.brand:hover .brand-mark{transform:translateY(-2px) scale(1.035);box-shadow:0 9px 20px rgba(18,59,112,.17)}
+.brand-light .brand-mark{background:#fff;border-color:#C8D6E8}
+@keyframes schoolLogoFloat{
+  0%,100%{transform:translateY(0) scale(1);filter:drop-shadow(0 0 0 rgba(40,120,200,0))}
+  50%{transform:translateY(-2px) scale(1.025);filter:drop-shadow(0 3px 5px rgba(40,120,200,.18))}
+}
+@media(max-width:700px){.brand-mark{width:44px;height:44px;flex-basis:44px;border-radius:9px}.brand-mark img{padding:3px}}
+@media(prefers-reduced-motion:reduce){.brand-mark img{animation:none}.brand-mark{transition:none}}
