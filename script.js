@@ -120,14 +120,11 @@ if (resultSearch) {
       .order("student_name", { ascending: true });
 
     if (error) throw error;
-    if (!Array.isArray(data) || data.length === 0) return;
-
     const tbody = document.querySelector("#resultsTable tbody");
     const resultCount = document.getElementById("resultCount");
-    if (!tbody) return;
-
-    tbody.replaceChildren();
-    data.forEach((record) => {
+    if (Array.isArray(data) && data.length > 0 && tbody) {
+      tbody.replaceChildren();
+      data.forEach((record) => {
       const row = document.createElement("tr");
       [
         record.year,
@@ -140,8 +137,8 @@ if (resultSearch) {
         row.appendChild(cell);
       });
       tbody.appendChild(row);
-    });
-
+      });
+    }
 
     // Public gallery only reads rows explicitly approved by the school admin.
     const galleryGrid = document.getElementById("publishedGalleryGrid");
@@ -175,8 +172,8 @@ if (resultSearch) {
       }
     }
 
-    if (resultCount) resultCount.textContent = data.length + " records · live database";
-    if (resultSearch) resultSearch.dispatchEvent(new Event("input"));
+    if (resultCount && Array.isArray(data) && data.length > 0) resultCount.textContent = data.length + " records · live database";
+    if (resultSearch && Array.isArray(data) && data.length > 0) resultSearch.dispatchEvent(new Event("input"));
   } catch (error) {
     console.warn("School results database is temporarily unavailable; showing the saved page records.", error);
   }
