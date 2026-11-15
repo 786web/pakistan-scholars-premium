@@ -142,6 +142,39 @@ if (resultSearch) {
       tbody.appendChild(row);
     });
 
+
+    // Public gallery only reads rows explicitly approved by the school admin.
+    const galleryGrid = document.getElementById("publishedGalleryGrid");
+    if (galleryGrid) {
+      const { data: photos, error: galleryError } = await schoolDb
+        .from("school_gallery")
+        .select("id, campus, title, alt_text, public_image_path")
+        .eq("is_published", true)
+        .not("public_image_path", "is", null)
+        .order("created_at", { ascending: false });
+      if (galleryError) throw galleryError;
+      if (Array.isArray(photos) && photos.length) {
+        galleryGrid.replaceChildren();
+        photos.forEach((photo) => {
+          const card = document.createElement("article");
+          card.className = "published-gallery-card";
+          const image = document.createElement("img");
+          image.src = schoolDb.storage.from("school-gallery-public").getPublicUrl(photo.public_image_path).data.publicUrl;
+          image.alt = photo.alt_text || photo.title || "Pakistan Scholars High School campus photograph";
+          image.loading = "lazy";
+          const info = document.createElement("div");
+          info.className = "published-gallery-caption";
+          const title = document.createElement("h3");
+          title.textContent = photo.title;
+          const campus = document.createElement("span");
+          campus.textContent = photo.campus + " Campus";
+          info.append(campus, title);
+          card.append(image, info);
+          galleryGrid.appendChild(card);
+        });
+      }
+    }
+
     if (resultCount) resultCount.textContent = data.length + " records · live database";
     if (resultSearch) resultSearch.dispatchEvent(new Event("input"));
   } catch (error) {
