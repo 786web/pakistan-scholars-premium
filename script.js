@@ -39,8 +39,21 @@ admissionForm.addEventListener("submit", (event) => {
   ].join("\n");
 
   document.getElementById("formStatus").textContent = "Opening WhatsApp with your admission enquiry…";
-  const whatsappUrl = "https://wa.me/923001560822?text=" + encodeURIComponent(message);
-  window.open(whatsappUrl, "_blank", "noopener,noreferrer");
+  const campusNumbers = {
+    "bherowal": "923455760821",
+    "bhoa-hassan": "923150799406"
+  };
+  const selectedCampus = data.get("campus");
+  const whatsappNumber = campusNumbers[selectedCampus];
+  if (!whatsappNumber) {
+    document.getElementById("formStatus").textContent = "Please select a campus before sending your enquiry.";
+    return;
+  }
+  const whatsappUrl = "https://wa.me/" + whatsappNumber + "?text=" + encodeURIComponent(message);
+  const whatsappWindow = window.open(whatsappUrl, "_blank");
+  if (!whatsappWindow) {
+    document.getElementById("formStatus").textContent = "WhatsApp could not open automatically. Please allow pop-ups and try again.";
+  }
 });
 
 // Lightweight premium motion: reveal on scroll and gentle 3D card tilt.
