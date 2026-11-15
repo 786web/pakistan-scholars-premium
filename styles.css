@@ -321,3 +321,21 @@
 .founder-monogram img{width:100%;height:100%;object-fit:contain;object-position:center;padding:14px;border-radius:50%;background:transparent}
 @media(max-width:700px){.founder-monogram{width:160px;height:160px}}
 @media(prefers-reduced-motion:reduce){.founder-monogram{animation:none}}
+
+
+/* Continuous spherical 3D rotation for the school logo */
+.brand-mark,.founder-monogram{
+  animation:schoolLogoSphere 8s linear infinite!important;
+  transform-style:preserve-3d;
+  backface-visibility:visible;
+}
+@keyframes schoolLogoSphere{
+  0%{transform:perspective(800px) rotateX(0deg) rotateY(0deg) rotateZ(0deg)}
+  25%{transform:perspective(800px) rotateX(90deg) rotateY(90deg) rotateZ(0deg)}
+  50%{transform:perspective(800px) rotateX(180deg) rotateY(180deg) rotateZ(90deg)}
+  75%{transform:perspective(800px) rotateX(270deg) rotateY(270deg) rotateZ(180deg)}
+  100%{transform:perspective(800px) rotateX(360deg) rotateY(360deg) rotateZ(360deg)}
+}
+@media(prefers-reduced-motion:reduce){
+  .brand-mark,.founder-monogram{animation:none!important}
+}
