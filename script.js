@@ -169,7 +169,7 @@ if (resultSearch) {
           const card = document.createElement("article");
           card.className = "published-gallery-card";
           const image = document.createElement("img");
-          image.src = schoolDb.storage.from("school-gallery-public").getPublicUrl(photo.public_image_path).data.publicUrl;
+          image.src = /^https:\/\//i.test(photo.public_image_path) ? photo.public_image_path : schoolDb.storage.from("school-gallery-public").getPublicUrl(photo.public_image_path).data.publicUrl;
           image.alt = photo.alt_text || photo.title || "Pakistan Scholars High School campus photograph";
           image.loading = "lazy";
           const info = document.createElement("div");
