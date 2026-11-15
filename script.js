@@ -32,7 +32,7 @@ admissionForm.addEventListener("submit", (event) => {
     "Parent / Guardian: " + data.get("parentName"),
     "Student: " + data.get("studentName"),
     "Class: " + data.get("className"),
-    "Preferred campus: " + data.get("campus"),
+    "Preferred campus: " + (data.get("campus") === "bherowal" ? "Bherowal Campus" : "Bhoa Hassan Campus"),
     "Contact number: " + data.get("phone"),
     "",
     "Please share the admission details. Thank you."
