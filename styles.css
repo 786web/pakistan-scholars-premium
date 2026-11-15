@@ -341,11 +341,13 @@
 }
 
 
-/* Premium framed founder portrait */
+/* Premium founder portrait: preserve the complete original photo */
 .founder-visual{
   position:relative;
   isolation:isolate;
   overflow:hidden;
+  min-height:540px;
+  padding:34px 24px 82px;
   background:
     radial-gradient(ellipse at 50% 42%,rgba(67,111,171,.48) 0%,transparent 48%),
     linear-gradient(145deg,#0b1d3b 0%,#173866 52%,#09162d 100%);
@@ -360,7 +362,7 @@
   height:465px;
   border:1px solid rgba(218,190,127,.78);
   border-radius:22px;
-  transform:translate(-50%,-50%) rotate(-3deg);
+  transform:translate(-50%,-50%) rotate(-2deg);
   box-shadow:0 0 28px rgba(218,190,127,.12),inset 0 0 22px rgba(218,190,127,.06);
   pointer-events:none;
 }
@@ -368,29 +370,30 @@
   width:370px;
   height:455px;
   border-color:rgba(206,222,245,.55);
-  transform:translate(-50%,-50%) rotate(3deg);
+  transform:translate(-50%,-50%) rotate(2deg);
 }
 .founder-photo{
   position:relative;
   z-index:1;
   display:block;
-  width:min(100%,340px);
-  height:425px;
-  object-fit:cover;
-  object-position:center 28%;
-  padding:6px;
+  width:auto;
+  height:auto;
+  max-width:min(100%,340px);
+  max-height:420px;
+  object-fit:contain;
+  object-position:center;
+  padding:7px;
   border:1px solid #d9bd82;
   border-radius:17px;
-  background:linear-gradient(145deg,#fff,#dce7f5 55%,#b7c8df);
+  background:#f7f8fb;
   box-shadow:
     0 0 0 3px rgba(10,28,56,.85),
     0 0 0 5px rgba(218,190,127,.82),
     0 22px 48px rgba(0,0,0,.42),
     0 0 34px rgba(127,166,218,.2);
-  transition:transform .45s ease,box-shadow .45s ease;
+  transition:box-shadow .45s ease;
 }
 .founder-visual:hover .founder-photo{
-  transform:translateY(-4px) scale(1.012);
   box-shadow:0 0 0 3px rgba(10,28,56,.85),0 0 0 5px rgba(232,204,145,.95),0 28px 56px rgba(0,0,0,.48),0 0 42px rgba(127,166,218,.28);
 }
 .founder-caption{
@@ -405,9 +408,10 @@
   letter-spacing:.16em;
 }
 @media(max-width:700px){
-  .founder-visual:before{width:min(88%,330px);height:400px}
-  .founder-visual:after{width:min(86%,320px);height:390px}
-  .founder-photo{width:min(100%,290px);height:365px}
+  .founder-visual{min-height:490px;padding:30px 18px 78px}
+  .founder-visual:before{width:min(88%,330px);height:410px}
+  .founder-visual:after{width:min(86%,320px);height:400px}
+  .founder-photo{max-width:min(100%,290px);max-height:365px}
   .founder-caption{font-size:8px;letter-spacing:.12em}
 }
 @media(prefers-reduced-motion:reduce){.founder-photo{transition:none}}
