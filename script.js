@@ -193,20 +193,23 @@ if (resultSearch) {
 })();
 
 
-// Load the school logo selected by an authorized admin.
+// Load the same latest admin-selected logo into every public brand mark.
 (async()=>{
  try{
   const {createClient}=await import("https://esm.sh/@supabase/supabase-js@2.119.0");
   const client=createClient("https://vuptztqeqblngbpflqzt.supabase.co","sb_publishable_fglLwYtA9GpLJdkwRc90Jw_dNw7TtK8");
-  const {data,error}=await client.from("school_settings").select("logo_path").eq("id",1).maybeSingle();
-  if(error||!data?.logo_path)return;
-  const url=client.storage.from("school-gallery-public").getPublicUrl(data.logo_path).data.publicUrl;
+  const {data,error}=await client.from("school_settings").select("logo_path,updated_at").eq("id",1).maybeSingle();
+  if(error)throw error;
+  if(!data?.logo_path)return;
+  const base=client.storage.from("school-gallery-public").getPublicUrl(data.logo_path).data.publicUrl;
+  const url=base+(base.includes("?")?"&":"?")+"v="+encodeURIComponent(data.updated_at||Date.now());
   document.querySelectorAll(".brand-mark").forEach(mark=>{
    const img=document.createElement("img");
-   img.src=url;img.alt="Pakistan Scholars High School logo";
-   img.style.cssText="display:block;width:100%;height:100%;object-fit:contain;padding:3px";
+   img.src=url;img.alt="Pakistan Scholars High School logo";img.loading="eager";img.decoding="async";
+   img.onerror=()=>{console.warn("Uploaded school logo could not be displayed:",url);};
    mark.replaceChildren(img);
    mark.setAttribute("aria-label","Pakistan Scholars High School logo");
+   mark.setAttribute("title","Pakistan Scholars High School");
   });
  }catch(error){console.warn("School logo could not be loaded.",error);}
 })();
