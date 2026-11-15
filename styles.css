@@ -339,3 +339,10 @@
 @media(prefers-reduced-motion:reduce){
   .brand-mark,.founder-monogram{animation:none!important}
 }
+
+
+/* Founder portrait: use the supplied photograph, not the rotating school logo. */
+.founder-visual{position:relative;overflow:hidden;}
+.founder-photo{position:relative;z-index:1;display:block;width:min(100%,360px);height:440px;object-fit:cover;object-position:center 28%;border:5px solid rgba(213,228,247,.9);border-radius:12px;box-shadow:0 18px 42px rgba(0,0,0,.28);}
+.founder-visual:before,.founder-visual:after{pointer-events:none;}
+@media(max-width:700px){.founder-photo{width:min(100%,310px);height:380px;}}
