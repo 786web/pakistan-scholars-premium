@@ -77,3 +77,13 @@
 .published-gallery-empty{grid-column:1/-1;padding:28px;background:#fff;border:1px dashed #d8d9ce;color:var(--muted);font-size:12px}
 @media(max-width:700px){.published-gallery-grid{grid-template-columns:1fr 1fr;gap:10px}.published-gallery-card img{height:175px}.published-gallery-caption{padding:12px}.published-gallery-caption h3{font-size:15px}}
 @media(max-width:420px){.published-gallery-grid{grid-template-columns:1fr}.published-gallery-card img{height:220px}}
+
+/* Campus contact details */
+.campus-contact{margin-top:9px!important;font-weight:800;color:var(--green)!important}
+.campus-contact a{color:var(--green);text-decoration:none}
+.campus-links{margin-top:4px!important}
+.campus-links a{font-size:10px;font-weight:800;color:#9a793d;text-decoration:underline;text-underline-offset:3px}
+.contact-campus-links{display:flex;flex-wrap:wrap;gap:9px 20px;margin-top:14px}
+.contact-campus-links a{font-size:11px;font-weight:700;color:var(--green);text-decoration:underline;text-underline-offset:3px}
+.footer-campus-label{font-size:8px;letter-spacing:.12em;color:var(--gold);margin-top:8px}
+.admission-form select{cursor:pointer}
