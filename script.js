@@ -191,3 +191,22 @@ if (resultSearch) {
     console.warn("School results database is temporarily unavailable; showing the saved page records.", error);
   }
 })();
+
+
+// Load the school logo selected by an authorized admin.
+(async()=>{
+ try{
+  const {createClient}=await import("https://esm.sh/@supabase/supabase-js@2.119.0");
+  const client=createClient("https://vuptztqeqblngbpflqzt.supabase.co","sb_publishable_fglLwYtA9GpLJdkwRc90Jw_dNw7TtK8");
+  const {data,error}=await client.from("school_settings").select("logo_path").eq("id",1).maybeSingle();
+  if(error||!data?.logo_path)return;
+  const url=client.storage.from("school-gallery-public").getPublicUrl(data.logo_path).data.publicUrl;
+  document.querySelectorAll(".brand-mark").forEach(mark=>{
+   const img=document.createElement("img");
+   img.src=url;img.alt="Pakistan Scholars High School logo";
+   img.style.cssText="display:block;width:100%;height:100%;object-fit:contain;padding:3px";
+   mark.replaceChildren(img);
+   mark.setAttribute("aria-label","Pakistan Scholars High School logo");
+  });
+ }catch(error){console.warn("School logo could not be loaded.",error);}
+})();
