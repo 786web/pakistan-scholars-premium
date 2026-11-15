@@ -273,25 +273,38 @@
  .campus-section .campus-image{height:210px}
 }
 
-/* School logo: clean fit with subtle, accessible motion */
+
+/* Circular 3D school identity mark */
 .brand-mark{
-  width:50px;height:50px;flex:0 0 50px;
-  display:grid;place-items:center;overflow:visible;
-  border:1px solid #C8D6E8;border-radius:11px;
-  background:#fff;color:#123B70;
-  box-shadow:0 5px 14px rgba(18,59,112,.10);
-  transition:transform .28s ease,box-shadow .28s ease;
+  width:54px;height:54px;flex:0 0 54px;position:relative;
+  display:grid;place-items:center;overflow:hidden;
+  border-radius:50%!important;border:2px solid #d5e4f7;
+  background:radial-gradient(circle at 30% 24%,#fff 0%,#f0f6ff 48%,#d5e4f7 100%);
+  box-shadow:0 7px 0 #0b2b53,0 11px 22px rgba(8,35,72,.25),inset 0 2px 5px #fff;
+  transform-style:preserve-3d;perspective:700px;
+  animation:schoolLogo3D 5.2s ease-in-out infinite;
+  transition:box-shadow .35s ease,filter .35s ease;
+}
+.brand-mark:before{
+  content:"";position:absolute;inset:3px;border-radius:50%;
+  border:1px solid rgba(40,120,200,.25);pointer-events:none;
 }
 .brand-mark img{
   display:block;width:100%;height:100%;max-width:100%;max-height:100%;
-  object-fit:contain;object-position:center;padding:4px;border-radius:10px;
-  animation:schoolLogoFloat 4.8s ease-in-out infinite;transform-origin:center;
+  object-fit:contain;object-position:center;padding:5px;
+  border-radius:50%;background:transparent;position:relative;z-index:1;
+  filter:drop-shadow(0 2px 2px rgba(12,35,70,.16));
 }
-.brand:hover .brand-mark{transform:translateY(-2px) scale(1.035);box-shadow:0 9px 20px rgba(18,59,112,.17)}
-.brand-light .brand-mark{background:#fff;border-color:#C8D6E8}
-@keyframes schoolLogoFloat{
-  0%,100%{transform:translateY(0) scale(1);filter:drop-shadow(0 0 0 rgba(40,120,200,0))}
-  50%{transform:translateY(-2px) scale(1.025);filter:drop-shadow(0 3px 5px rgba(40,120,200,.18))}
+.brand:hover .brand-mark{
+  box-shadow:0 9px 0 #0b2b53,0 16px 28px rgba(8,35,72,.32),inset 0 2px 5px #fff;
+  filter:saturate(1.12);
 }
-@media(max-width:700px){.brand-mark{width:44px;height:44px;flex-basis:44px;border-radius:9px}.brand-mark img{padding:3px}}
-@media(prefers-reduced-motion:reduce){.brand-mark img{animation:none}.brand-mark{transition:none}}
+.brand-light .brand-mark{background:radial-gradient(circle at 30% 24%,#fff,#eaf2fc 75%);border-color:#d5e4f7}
+@keyframes schoolLogo3D{
+  0%,100%{transform:perspective(700px) rotateY(-7deg) rotateX(3deg) translateY(0)}
+  25%{transform:perspective(700px) rotateY(0deg) rotateX(0deg) translateY(-2px)}
+  50%{transform:perspective(700px) rotateY(8deg) rotateX(-3deg) translateY(-4px)}
+  75%{transform:perspective(700px) rotateY(0deg) rotateX(0deg) translateY(-2px)}
+}
+@media(max-width:700px){.brand-mark{width:46px;height:46px;flex-basis:46px}.brand-mark img{padding:4px}}
+@media(prefers-reduced-motion:reduce){.brand-mark{animation:none;transition:none}}
