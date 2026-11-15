@@ -64,3 +64,16 @@
 .founder-vision blockquote{font-family:var(--serif);font-size:18px;line-height:1.55;color:var(--green);margin:8px 0 0}
 @media(max-width:900px){.key-features-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.founder-grid{gap:45px}}
 @media(max-width:700px){.key-features-grid{grid-template-columns:1fr}.key-feature-card{min-height:0;padding:20px}.founder-grid{grid-template-columns:1fr;gap:35px}.founder-visual{min-height:300px}.founder-monogram{font-size:95px}.founder-visual:before{width:220px;height:220px}.founder-visual:after{width:280px;height:280px}.founder-copy h2{font-size:39px}}
+
+/* Public school photo gallery */
+.published-gallery-section{background:#f7f6f1}
+.published-gallery-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+.published-gallery-card{position:relative;overflow:hidden;background:#fff;border:1px solid #e5e5dc;box-shadow:0 10px 28px #092c2410}
+.published-gallery-card img{display:block;width:100%;height:260px;object-fit:cover;background:#e9ece6;transition:transform .5s ease}
+.published-gallery-card:hover img{transform:scale(1.035)}
+.published-gallery-caption{padding:16px 18px}
+.published-gallery-caption span{font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:#9a793d;font-weight:800}
+.published-gallery-caption h3{font-family:var(--serif);font-size:18px;color:var(--green);margin:6px 0 0}
+.published-gallery-empty{grid-column:1/-1;padding:28px;background:#fff;border:1px dashed #d8d9ce;color:var(--muted);font-size:12px}
+@media(max-width:700px){.published-gallery-grid{grid-template-columns:1fr 1fr;gap:10px}.published-gallery-card img{height:175px}.published-gallery-caption{padding:12px}.published-gallery-caption h3{font-size:15px}}
+@media(max-width:420px){.published-gallery-grid{grid-template-columns:1fr}.published-gallery-card img{height:220px}}
