@@ -176,3 +176,52 @@
  .main-nav>a:not(.nav-cta){border-bottom-color:#E7EAF0}
  .hero-shade{background:linear-gradient(90deg,rgba(8,18,43,.94),rgba(16,29,58,.62)),linear-gradient(0deg,rgba(8,18,43,.4),transparent)}
 }
+
+/* Approved preview layout: navy navigation, pale-blue hero, white campus cards */
+.topbar{background:#0B1428;color:#E8EDF5}
+.topbar a{color:#fff}
+.site-header{background:#123B70;border-bottom:1px solid #274F82}
+.brand-mark{background:#fff;color:#123B70;border-color:#C5CEDB}
+.brand-copy strong{color:#fff}
+.brand-copy small{color:#D5E0EF}
+.main-nav{color:#fff}
+.main-nav>a:not(.nav-cta){color:#E8EEF8}
+.main-nav>a:not(.nav-cta):hover,.main-nav>a.active{color:#BFD0E6}
+.nav-cta{background:#fff;color:#123B70}
+.nav-cta span{color:#2878C8}
+.menu-toggle{color:#fff}
+.preview-hero{height:auto;min-height:440px;padding:82px 0 74px;background:#EAF3FC;color:#123B70;display:flex;align-items:center}
+.preview-hero .hero-content{padding:0}
+.preview-hero .eyebrow{color:#2878C8}
+.preview-hero .eyebrow>span{background:#2878C8}
+.preview-hero h1{font-size:clamp(46px,6vw,72px);color:#123B70;margin:18px 0}
+.preview-hero h1 em{color:#2878C8}
+.preview-hero .hero-lead{color:#405674;font-size:16px}
+.preview-hero .hero-actions{margin-top:25px}
+.preview-hero .btn-gold{background:#2878C8;color:#fff}
+.preview-hero .btn-gold:hover{background:#164F91}
+.preview-hero .text-link{color:#123B70}
+.preview-hero .text-link span{color:#2878C8;margin-left:7px}
+.preview-hero .hero-note{margin-top:35px}
+.preview-hero .note-icon{border-color:#AFC5E1;color:#2878C8}
+.preview-hero .hero-note strong{color:#123B70}
+.preview-hero .hero-note small{color:#526985}
+.preview-hero:after{display:none}
+.campus-section{background:#fff;padding-top:70px;padding-bottom:78px}
+.campus-section .section-heading h2{color:#123B70}
+.campus-section .section-heading h2 em{color:#2878C8}
+.campus-card{background:#fff;border:1px solid #DCE8F5;border-radius:12px;overflow:hidden;box-shadow:0 8px 26px rgba(18,59,112,.07)}
+.campus-image{height:245px}
+.campus-tag{background:#2878C8;color:#fff;border-radius:5px}
+.campus-info h3{color:#123B70}
+.campus-contact,.campus-contact a,.contact-campus-links a{color:#164F91}
+.round-arrow{border-color:#BFD0E6;color:#2878C8;border-radius:50%}
+@media(max-width:700px){
+ .site-header{background:#123B70}
+ .main-nav{background:#123B70}
+ .main-nav>a:not(.nav-cta){color:#fff;border-bottom-color:#315989}
+ .preview-hero{min-height:0;padding:65px 0 55px}
+ .preview-hero h1{font-size:46px}
+ .campus-section{padding-top:55px;padding-bottom:55px}
+ .campus-image{height:215px}
+}
