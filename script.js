@@ -177,7 +177,7 @@ if (resultSearch) {
           const title = document.createElement("h3");
           title.textContent = photo.title;
           const campus = document.createElement("span");
-          campus.textContent = photo.campus + " Campus";
+          campus.textContent = photo.campus === "School Gallery" ? "PAKISTAN SCHOLARS" : photo.campus + " Campus";
           info.append(campus, title);
           card.append(image, info);
           galleryGrid.appendChild(card);
