@@ -8,6 +8,7 @@ $("loginForm").addEventListener("submit",async e=>{e.preventDefault();say("login
 $("logout").onclick=async()=>{await db.auth.signOut();location.reload();};
 document.querySelectorAll("[data-tab]").forEach(b=>b.onclick=()=>{document.querySelectorAll("[data-tab]").forEach(x=>x.classList.toggle("active",x===b));document.querySelectorAll(".panel").forEach(x=>x.hidden=x.id!=="p-"+b.dataset.tab);});
 async function load(){
+ await loadSchoolLogo();
  const [r,g,e]=await Promise.all([
   db.from("school_results").select("*").order("year",{ascending:false}),
   db.from("school_gallery").select("*").order("created_at",{ascending:false}),
@@ -82,4 +83,39 @@ $("passwordForm").onsubmit=async e=>{
  if(verified.error){say("passwordStatus","Current password is incorrect. Please try again.");return;}
  const updated=await db.auth.updateUser({password:next});if(updated.error){say("passwordStatus",updated.error.message);return;}
  e.currentTarget.reset();say("passwordStatus","Password updated successfully. Use the new password next time you sign in.");
+};
+
+
+async function loadSchoolLogo(){
+ const {data,error}=await db.from("school_settings").select("logo_path").eq("id",1).maybeSingle();
+ if(error){say("logoStatus",error.message);return;}
+ const preview=$("logoPreview");
+ if(data?.logo_path){
+  const url=db.storage.from(PUBLIC_BUCKET).getPublicUrl(data.logo_path).data.publicUrl;
+  preview.innerHTML='<img src="'+esc(url)+'" alt="Current school logo" style="width:100%;height:100%;object-fit:contain">';
+ }else{preview.textContent="PS";}
+}
+$("logoForm").onsubmit=async e=>{
+ e.preventDefault();
+ const file=$("schoolLogoFile").files[0];
+ if(!file){say("logoStatus","Please choose a logo image.");return;}
+ if(file.size>5*1024*1024){say("logoStatus","Logo must be 5 MB or smaller.");return;}
+ if(!["image/jpeg","image/png","image/webp"].includes(file.type)){say("logoStatus","Only JPG, PNG and WebP files are allowed.");return;}
+ const button=e.currentTarget.querySelector("button");button.disabled=true;
+ try{
+  say("logoStatus","Uploading logo…");
+  const old=await db.from("school_settings").select("logo_path").eq("id",1).maybeSingle();
+  if(old.error)throw old.error;
+  const ext=file.name.split(".").pop().toLowerCase();
+  const path="branding/school-logo-"+crypto.randomUUID()+"."+ext;
+  const uploaded=await db.storage.from(PUBLIC_BUCKET).upload(path,file,{contentType:file.type,cacheControl:"60",upsert:false});
+  if(uploaded.error)throw uploaded.error;
+  const saved=await db.from("school_settings").upsert({id:1,logo_path:path,updated_at:new Date().toISOString()},{onConflict:"id"});
+  if(saved.error){await db.storage.from(PUBLIC_BUCKET).remove([path]);throw saved.error;}
+  if(old.data?.logo_path)await db.storage.from(PUBLIC_BUCKET).remove([old.data.logo_path]);
+  await loadSchoolLogo();
+  e.currentTarget.reset();
+  say("logoStatus","Logo updated. Refresh the public website to see the new logo.");
+ }catch(error){say("logoStatus",error.message||"Logo upload failed.");}
+ finally{button.disabled=false;}
 };
