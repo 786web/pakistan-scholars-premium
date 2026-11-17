@@ -441,3 +441,60 @@
 .result-left:after{background:linear-gradient(90deg,rgba(16,29,58,.99) 0%,rgba(16,29,58,.96) 34%,rgba(16,29,58,.72) 56%,rgba(16,29,58,.12) 100%)}
 .result-left>*:not(.result-topper-photo){max-width:58%}
 @media(max-width:700px){.result-feature{min-height:0}.result-left{min-height:470px;padding:30px 22px;justify-content:flex-end}.result-topper-photo{width:100%;height:100%;object-fit:contain;object-position:center top;opacity:.9}.result-left:after{background:linear-gradient(180deg,rgba(16,29,58,.05) 0%,rgba(16,29,58,.28) 35%,rgba(16,29,58,.94) 66%,rgba(16,29,58,.99) 100%)}.result-left>*:not(.result-topper-photo){max-width:100%}.result-score{font-size:60px}}
+
+
+/* November 2026 refinement: larger still logo and scroll-aware school identity */
+.site-header{height:104px;transition:height .28s ease,box-shadow .28s ease}
+.site-header .brand-mark{width:70px;height:70px;flex-basis:70px;animation:none!important;transform:none!important}
+.site-header .brand-copy strong{font-size:18px;letter-spacing:.075em;transition:font-size .28s ease}
+.site-header .brand-copy small{font-size:10px;transition:font-size .28s ease}
+.site-header.is-scrolled{height:76px;box-shadow:0 8px 28px rgba(16,29,58,.10)}
+.site-header.is-scrolled .brand-mark{width:56px;height:56px;flex-basis:56px}
+.site-header.is-scrolled .brand-copy strong{font-size:12px}
+.site-header.is-scrolled .brand-copy small{font-size:8px}
+.site-header .brand-mark img{padding:3px}
+@media(max-width:700px){
+  .site-header{height:78px}
+  .site-header .brand-mark{width:58px;height:58px;flex-basis:58px}
+  .site-header .brand-copy strong{font-size:14px}
+  .site-header.is-scrolled{height:66px}
+  .site-header.is-scrolled .brand-mark{width:48px;height:48px;flex-basis:48px}
+  .site-header.is-scrolled .brand-copy strong{font-size:11px}
+}
+
+/* Homepage campus image slider */
+.hero-slider{isolation:isolate;overflow:hidden;background:#101d3a}
+.hero-slides,.hero-slide,.hero-slider-shade{position:absolute;inset:0}
+.hero-slide{background-position:center;background-size:cover;opacity:0;transform:scale(1.025);transition:opacity .8s ease,transform 5s ease}
+.hero-slide.is-active{opacity:1;transform:scale(1)}
+.hero-slider-shade{z-index:0;background:linear-gradient(90deg,rgba(7,22,48,.91),rgba(7,22,48,.66) 48%,rgba(7,22,48,.22)),linear-gradient(0deg,rgba(7,22,48,.5),transparent 55%)}
+.hero-slider .hero-content{z-index:1}
+.hero-slider .eyebrow,.hero-slider h1,.hero-slider .hero-lead,.hero-slider .text-link,.hero-slider .hero-note strong{color:#fff}
+.hero-slider .hero-note small{color:#e1e9f6}
+.hero-slider .hero-slider-controls{display:flex;align-items:center;gap:13px;margin-top:25px}
+.hero-slider-controls button{cursor:pointer}
+.hero-slider-prev,.hero-slider-next{width:34px;height:34px;border:1px solid rgba(255,255,255,.7);border-radius:50%;background:rgba(7,22,48,.35);color:#fff;font-size:22px;line-height:1}
+.hero-slider-dots{display:flex;align-items:center;gap:8px}
+.hero-slider-dots button{width:8px;height:8px;padding:0;border:0;border-radius:50%;background:rgba(255,255,255,.5)}
+.hero-slider-dots button.is-active{width:23px;border-radius:10px;background:#d5ad59}
+@media(max-width:700px){.hero-slider{min-height:570px}.hero-slider-shade{background:linear-gradient(90deg,rgba(7,22,48,.82),rgba(7,22,48,.5)),linear-gradient(0deg,rgba(7,22,48,.58),transparent)}.hero-slider .hero-content{padding-top:45px;padding-bottom:40px}.hero-slider-controls{margin-top:22px}}
+
+/* Expanded leadership profiles with clear Read More controls */
+.founder-section,.managing-director-section{padding-top:125px;padding-bottom:125px}
+.founder-grid{grid-template-columns:.9fr 1.1fr;gap:78px}
+.founder-copy h2,.managing-director-copy h2{font-size:clamp(42px,4.6vw,59px);line-height:1.12}
+.founder-copy>p:not(.founder-role),.managing-director-copy>p:not(.founder-role){font-size:14px;line-height:2.05;color:#53627a;margin:16px 0}
+.leadership-more-content[hidden]{display:none}
+.leadership-more-content{animation:leadershipReveal .3s ease}
+.leadership-read-more{display:inline-flex;align-items:center;gap:16px;margin-top:16px;padding:12px 18px;border:1px solid #b9c8dd;background:#fff;color:#17366b;font:700 11px var(--sans);letter-spacing:.07em;cursor:pointer;transition:background .2s,color .2s,border-color .2s}
+.leadership-read-more:hover{background:#17366b;color:#fff;border-color:#17366b}
+.leadership-read-more span{font-size:17px;line-height:1}
+.founder-vision{margin-top:28px}
+@keyframes leadershipReveal{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+/* Compact quick sidebar intentionally starts near the bottom of the screen */
+.quick-sidebar{position:fixed;right:16px;bottom:112px;z-index:18;display:flex;flex-direction:column;gap:8px}
+.quick-sidebar a{width:42px;height:42px;display:grid;place-items:center;border:1px solid #d8e2f0;border-radius:50%;background:rgba(255,255,255,.96);color:#17366b;font-size:17px;box-shadow:0 6px 20px rgba(16,29,58,.14);transition:transform .2s,background .2s,color .2s}
+.quick-sidebar a:hover{transform:translateY(-3px);background:#17366b;color:#fff}
+@media(max-width:700px){.quick-sidebar{right:10px;bottom:92px;gap:6px}.quick-sidebar a{width:37px;height:37px;font-size:15px}}
+@media(prefers-reduced-motion:reduce){.hero-slide,.site-header,.site-header .brand-copy strong,.site-header .brand-copy small,.leadership-more-content{transition:none;animation:none}}
