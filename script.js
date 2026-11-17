@@ -223,3 +223,18 @@ if (resultSearch) {
   updateHeader();
   window.addEventListener("scroll", updateHeader, { passive: true });
 })();
+
+
+// Accessible More / Show less controls for both leadership biographies.
+document.querySelectorAll(".profile-more-btn").forEach((button) => {
+  button.addEventListener("click", () => {
+    const details = document.getElementById(button.getAttribute("aria-controls"));
+    if (!details) return;
+    const expanded = button.getAttribute("aria-expanded") === "true";
+    details.hidden = expanded;
+    button.setAttribute("aria-expanded", String(!expanded));
+    button.innerHTML = expanded
+      ? 'More <span aria-hidden="true">＋</span>'
+      : 'Show less <span aria-hidden="true">−</span>';
+  });
+});
