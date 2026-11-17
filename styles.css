@@ -1651,3 +1651,55 @@ button,a{touch-action:manipulation}
     animation:none!important;transition:none!important;transform:none!important;
   }
 }
+
+
+/* Extra refined motion for announcement content */
+@media (prefers-reduced-motion: no-preference) {
+  .announcement-label {
+    animation: announcementLabelEnter .65s .08s cubic-bezier(.2,.8,.2,1) both;
+  }
+  .announcement-copy {
+    animation: announcementCopyEnter .72s .18s cubic-bezier(.2,.8,.2,1) both;
+  }
+  .announcement-link {
+    animation: announcementLinkGlow 4.8s ease-in-out 1.2s infinite;
+    transition: color .25s ease, text-shadow .25s ease, transform .25s ease;
+  }
+  .announcement-bar::after {
+    animation: announcementEdgeGlow 3.8s ease-in-out infinite;
+    background-size: 200% 100%;
+  }
+  @keyframes announcementLabelEnter {
+    from { opacity: 0; transform: translate3d(-9px,0,10px) rotateY(-10deg); }
+    to { opacity: 1; transform: translate3d(0,0,0) rotateY(0); }
+  }
+  @keyframes announcementCopyEnter {
+    from { opacity: 0; transform: translate3d(0,9px,10px); }
+    to { opacity: 1; transform: translate3d(0,0,14px); }
+  }
+  @keyframes announcementLinkGlow {
+    0%, 100% { text-shadow: 0 0 0 rgba(255,210,138,0); }
+    50% { text-shadow: 0 0 11px rgba(255,210,138,.48); }
+  }
+  @keyframes announcementEdgeGlow {
+    0%, 100% { opacity: .38; background-position: 0% 50%; }
+    50% { opacity: 1; background-position: 100% 50%; }
+  }
+}
+@media (hover:hover) and (pointer:fine) and (prefers-reduced-motion: no-preference) {
+  .announcement-link:hover {
+    transform: translateY(-2px);
+    text-shadow: 0 0 13px rgba(255,210,138,.62);
+  }
+}
+@media (max-width:760px) and (prefers-reduced-motion: no-preference) {
+  .announcement-label { animation-duration: .5s; }
+  .announcement-copy { animation-duration: .58s; }
+  .announcement-link { animation-duration: 6s; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .announcement-label, .announcement-copy, .announcement-link, .announcement-bar::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}
