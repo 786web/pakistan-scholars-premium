@@ -283,3 +283,49 @@ document.querySelectorAll(".profile-more-link").forEach((button) => {
   bar.hidden=false;
  }catch(error){console.warn("Latest school announcement could not be loaded.",error);}
 })();
+
+
+// Progressive category previews: keep the landing page concise and let visitors expand details.
+(() => {
+  document.querySelectorAll("[data-more-target]").forEach((button) => {
+    const target = document.getElementById(button.dataset.moreTarget);
+    if (!target) { button.hidden = true; return; }
+    const updateButton = () => {
+      const selector = target.id === "key-features-grid" ? ".key-feature-card" :
+        target.id === "resultsTable" ? "tbody tr" : ".published-gallery-card";
+      const count = target.querySelectorAll(selector).length;
+      button.hidden = count <= (target.id === "publishedGalleryGrid" ? 6 : 3);
+    };
+    updateButton();
+    button.addEventListener("click", () => {
+      const expanded = target.classList.toggle("is-expanded");
+      button.innerHTML = expanded ? 'Show less <span>↑</span>' :
+        (target.id === "key-features-grid" ? 'View all facilities <span>↗</span>' :
+         target.id === "resultsTable" ? 'View complete results <span>↗</span>' : 'View all photographs <span>↗</span>');
+      button.setAttribute("aria-expanded", String(expanded));
+      if (expanded) target.scrollIntoView({behavior:"smooth",block:"nearest"});
+    });
+  });
+
+  // Sort the short results preview by marks so visitors immediately see leading achievements.
+  const table = document.getElementById("resultsTable");
+  const body = table?.querySelector("tbody");
+  if (body) {
+    const rows = Array.from(body.rows);
+    rows.sort((a,b) => {
+      const score = row => Number((row.cells[3]?.textContent || "0").split("/")[0].replace(/,/g,"")) || 0;
+      return score(b)-score(a);
+    });
+    rows.forEach(row => body.appendChild(row));
+  }
+
+  // Detect broken photo URLs and keep the layout stable instead of showing broken-image icons.
+  document.querySelectorAll("img").forEach(img => {
+    img.addEventListener("error", () => {
+      img.classList.add("image-unavailable");
+      img.alt = img.alt || "School photograph currently unavailable";
+      const parent = img.parentElement;
+      if (parent) parent.classList.add("has-image-fallback");
+    }, {once:true});
+  });
+})();
