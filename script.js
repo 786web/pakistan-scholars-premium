@@ -77,7 +77,7 @@ admissionForm.addEventListener("submit", (event) => {
   if (reduceMotion) return;
 
   const revealTargets = document.querySelectorAll(
-    ".intro-copy, .intro-visual, .values-grid > div, .section-heading, .campus-card, .feature-item, .result-feature, .archive-row, .life-card, .admissions-grid > div, .admission-form, .contact-inner"
+    ".intro-copy, .intro-visual, .values-grid > div, .section-heading, .showcase-frame, .school-stat-card, .campus-card, .key-feature-card, .feature-item, .founder-grid > *, .managing-director-grid > *, .result-feature, .archive-row, .life-card, .published-gallery-card, .admissions-grid > div, .admission-form, .contact-inner"
   );
 
   if ("IntersectionObserver" in window) {
@@ -98,7 +98,7 @@ admissionForm.addEventListener("submit", (event) => {
 
   // Pointer-only tilt: disabled on touch screens for comfortable mobile use.
   if (window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
-    document.querySelectorAll(".campus-card, .life-card").forEach((card) => {
+    document.querySelectorAll(".campus-card, .life-card, .school-stat-card, .key-feature-card, .showcase-frame, .result-feature").forEach((card) => {
       card.addEventListener("pointermove", (event) => {
         const rect = card.getBoundingClientRect();
         const x = (event.clientX - rect.left) / rect.width;
