@@ -9,12 +9,13 @@ $("logout").onclick=async()=>{await db.auth.signOut();location.reload();};
 document.querySelectorAll("[data-tab]").forEach(b=>b.onclick=()=>{document.querySelectorAll("[data-tab]").forEach(x=>x.classList.toggle("active",x===b));document.querySelectorAll(".panel").forEach(x=>x.hidden=x.id!=="p-"+b.dataset.tab);});
 async function load(){
  await loadSchoolLogo();
- const [r,g,e]=await Promise.all([
+ const [r,g,e,a]=await Promise.all([
   db.from("school_results").select("*").order("year",{ascending:false}),
   db.from("school_gallery").select("*").order("created_at",{ascending:false}),
-  db.from("school_events").select("*").order("created_at",{ascending:false})
+  db.from("school_events").select("*").order("created_at",{ascending:false}),
+  db.from("school_announcements").select("*").order("created_at",{ascending:false})
  ]);
- if(r.error||g.error||e.error){say("globalStatus",[r.error,g.error,e.error].filter(Boolean).map(x=>x.message).join(" | "));return;}
+ if(r.error||g.error||e.error||a.error){say("globalStatus",[r.error,g.error,e.error,a.error].filter(Boolean).map(x=>x.message).join(" | "));return;}
  $("resultsList").innerHTML='<table><tr><th>Year</th><th>Name</th><th>Roll no.</th><th>Marks</th><th>Published</th></tr>'+r.data.map(x=>'<tr><td>'+x.year+'</td><td>'+esc(x.student_name)+'</td><td>'+esc(x.board_roll_no)+'</td><td>'+x.marks_obtained+'/'+x.total_marks+'</td><td>'+x.is_published+'</td></tr>').join("")+'</table>';
  $("galleryList").innerHTML='<table><tr><th>Campus</th><th>Title</th><th>Preview</th><th>Status</th><th>Actions</th></tr>'+g.data.map(x=>{
   const url=x.public_image_path?db.storage.from(PUBLIC_BUCKET).getPublicUrl(x.public_image_path).data.publicUrl:null;
@@ -23,6 +24,12 @@ async function load(){
   return '<tr><td>'+esc(x.campus)+'</td><td>'+esc(x.title)+'</td><td>'+preview+'</td><td>'+(x.is_published?'Public':'Draft')+'</td><td class="gallery-actions">'+action+' <button class="btn small danger" data-gallery-action="delete" data-id="'+x.id+'">Delete</button></td></tr>';
  }).join("")+'</table>'+(g.data.length?"":'<p>No gallery uploads yet.</p>');
  $("eventsList").innerHTML='<table><tr><th>Title</th><th>Campus</th><th>Date</th><th>Published</th></tr>'+e.data.map(x=>'<tr><td>'+esc(x.title)+'</td><td>'+esc(x.campus)+'</td><td>'+esc(x.event_date)+'</td><td>'+x.is_published+'</td></tr>').join("")+'</table>';
+ $("announcementsList").innerHTML='<table><tr><th>Title</th><th>Category</th><th>Status</th><th>Expiry</th><th>Actions</th></tr>'+a.data.map(x=>{
+  const state=x.is_published?'Published':'Draft';
+  const action=x.is_published?'<button class="btn small" data-announcement-action="unpublish" data-id="'+x.id+'">Unpublish</button>':'<button class="btn small" data-announcement-action="publish" data-id="'+x.id+'">Publish</button>';
+  const expiry=x.expires_at?new Date(x.expires_at).toLocaleString():'No expiry';
+  return '<tr><td>'+esc(x.title)+'</td><td>'+esc(x.announcement_type)+'</td><td>'+state+'</td><td>'+esc(expiry)+'</td><td class="gallery-actions"><button class="btn small" data-announcement-action="edit" data-id="'+x.id+'">Edit</button> '+action+' <button class="btn small danger" data-announcement-action="delete" data-id="'+x.id+'">Delete</button></td></tr>';
+ }).join("")+'</table>'+(a.data.length?"":'<p>No announcements yet. Add your first notice above.</p>');
 }
 $("galleryList").addEventListener("click",async event=>{
  const button=event.target.closest("[data-gallery-action]");if(!button)return;
@@ -72,6 +79,51 @@ async function deleteGallery(id){
 $("resultForm").onsubmit=async e=>{e.preventDefault();const f=new FormData(e.currentTarget),v=Object.fromEntries(f);["year","marks_obtained","total_marks"].forEach(k=>v[k]=Number(v[k]));v.is_published=false;const{error}=await db.from("school_results").insert(v);say("resultStatus",error?.message||"Saved as draft. Review before publishing.");if(!error){e.currentTarget.reset();await load();}};
 $("galleryForm").onsubmit=async e=>{e.preventDefault();const f=new FormData(e.currentTarget),file=f.get("photo");if(!file||file.size>8*1024*1024){say("galleryStatus","Select an image up to 8 MB.");return;}if(!["image/jpeg","image/png","image/webp"].includes(file.type)){say("galleryStatus","Only JPG, PNG and WebP files are allowed.");return;}const ext=file.name.split(".").pop().toLowerCase();const path=f.get("campus").toLowerCase().replaceAll(" ","-")+"/"+crypto.randomUUID()+"."+ext;say("galleryStatus","Uploading privately…");const up=await db.storage.from(PRIVATE_BUCKET).upload(path,file,{contentType:file.type});if(up.error){say("galleryStatus",up.error.message);return;}const{error}=await db.from("school_gallery").insert({campus:f.get("campus"),title:f.get("title"),alt_text:f.get("alt_text"),image_path:path,is_published:false,public_image_path:null});say("galleryStatus",error?.message||"Uploaded privately as a draft. Press Publish only after school approval.");if(!error){e.currentTarget.reset();await load();}};
 $("eventForm").onsubmit=async e=>{e.preventDefault();const f=new FormData(e.currentTarget),v=Object.fromEntries(f);v.event_date=v.event_date||null;v.is_published=false;const{error}=await db.from("school_events").insert(v);say("eventStatus",error?.message||"Event saved as draft.");if(!error){e.currentTarget.reset();await load();}};
+function localDateTime(value){if(!value)return "";const d=new Date(value);d.setMinutes(d.getMinutes()-d.getTimezoneOffset());return d.toISOString().slice(0,16);}
+function resetAnnouncementEditor(){const form=$("announcementForm");form.reset();$("announcementId").value="";$("announcementSaveButton").textContent="Save announcement draft";$("cancelAnnouncementEdit").hidden=true;}
+$("cancelAnnouncementEdit").addEventListener("click",resetAnnouncementEditor);
+$("announcementForm").onsubmit=async e=>{
+ e.preventDefault();
+ const form=e.currentTarget,raw=Object.fromEntries(new FormData(form)),id=raw.id;
+ const starts=raw.starts_at?new Date(raw.starts_at):new Date();
+ const expires=raw.expires_at?new Date(raw.expires_at):null;
+ if(Number.isNaN(starts.getTime())||(expires&&Number.isNaN(expires.getTime()))){say("announcementStatus","Please enter valid start and expiry dates.");return;}
+ if(expires&&expires<starts){say("announcementStatus","Expiry must be after the start date.");return;}
+ const payload={title:raw.title.trim(),message:raw.message.trim(),announcement_type:raw.announcement_type,link_label:raw.link_label.trim()||null,link_url:raw.link_url.trim()||null,starts_at:starts.toISOString(),expires_at:expires?expires.toISOString():null,updated_at:new Date().toISOString()};
+ const save=$("announcementSaveButton");save.disabled=true;say("announcementStatus",id?"Updating announcement…":"Saving announcement draft…");
+ try{
+  const result=id?await db.from("school_announcements").update(payload).eq("id",id):await db.from("school_announcements").insert({...payload,is_published:false});
+  if(result.error)throw result.error;
+  resetAnnouncementEditor();say("announcementStatus",id?"Announcement updated.":"Announcement saved as a draft. Publish it when ready.");await load();
+ }catch(error){say("announcementStatus",error.message||"Could not save announcement.");}
+ finally{save.disabled=false;}
+};
+$("announcementsList").addEventListener("click",async event=>{
+ const button=event.target.closest("[data-announcement-action]");if(!button)return;
+ const id=button.dataset.id,action=button.dataset.announcementAction;button.disabled=true;
+ try{
+  if(action==="edit"){
+   const{data,error}=await db.from("school_announcements").select("*").eq("id",id).single();if(error)throw error;
+   const form=$("announcementForm");$("announcementId").value=data.id;
+   form.elements.namedItem("announcement_type").value=data.announcement_type;
+   form.elements.namedItem("title").value=data.title;
+   form.elements.namedItem("message").value=data.message;
+   form.elements.namedItem("starts_at").value=localDateTime(data.starts_at);
+   form.elements.namedItem("expires_at").value=localDateTime(data.expires_at);
+   form.elements.namedItem("link_label").value=data.link_label||"";
+   form.elements.namedItem("link_url").value=data.link_url||"";
+   $("announcementSaveButton").textContent="Update announcement";$("cancelAnnouncementEdit").hidden=false;
+   say("announcementStatus","Editing: "+data.title);form.scrollIntoView({behavior:"smooth",block:"start"});
+  }else if(action==="publish"||action==="unpublish"){
+   const{error}=await db.from("school_announcements").update({is_published:action==="publish",updated_at:new Date().toISOString()}).eq("id",id);if(error)throw error;
+   say("announcementStatus",action==="publish"?"Announcement published on the public website.":"Announcement unpublished.");
+  }else if(action==="delete"&&window.confirm("Delete this announcement permanently?")){
+   const{error}=await db.from("school_announcements").delete().eq("id",id);if(error)throw error;
+   say("announcementStatus","Announcement deleted.");
+  }
+ }catch(error){say("announcementStatus",error.message||"Announcement action failed.");}
+ finally{button.disabled=false;await load();}
+});
 db.auth.onAuthStateChange(()=>session());session();
 $("passwordForm").onsubmit=async e=>{
  e.preventDefault();const f=new FormData(e.currentTarget),current=f.get("current_password"),next=f.get("new_password"),confirm=f.get("confirm_password");

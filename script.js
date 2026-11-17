@@ -256,3 +256,30 @@ document.querySelectorAll(".profile-more-link").forEach((button) => {
     button.textContent = expanded ? "Read more" : "Read less";
   });
 });
+
+
+// Load the latest active school announcement published by the admin panel.
+(async()=>{
+ const bar=document.getElementById("announcementBar");
+ if(!bar)return;
+ try{
+  const {createClient}=await import("https://esm.sh/@supabase/supabase-js@2.119.0");
+  const client=createClient("https://vuptztqeqblngbpflqzt.supabase.co","sb_publishable_fglLwYtA9GpLJdkwRc90Jw_dNw7TtK8");
+  const now=new Date().toISOString();
+  const {data,error}=await client.from("school_announcements").select("title,message,announcement_type,link_label,link_url,starts_at,expires_at").eq("is_published",true).lte("starts_at",now).order("created_at",{ascending:false}).limit(1);
+  if(error)throw error;
+  const notice=data?.[0];
+  if(!notice)return;
+  document.getElementById("announcementType").textContent=notice.announcement_type||"NOTICE";
+  document.getElementById("announcementTitle").textContent=notice.title;
+  document.getElementById("announcementMessage").textContent=notice.message;
+  const link=document.getElementById("announcementLink");
+  if(notice.link_url&&/^https?:\\/\\//i.test(notice.link_url)){
+   link.href=notice.link_url;link.textContent=(notice.link_label||"More information")+" ↗";link.hidden=false;
+  }
+  const date=document.getElementById("announcementDate");
+  date.textContent=new Intl.DateTimeFormat("en-PK",{day:"numeric",month:"short",year:"numeric"}).format(new Date(notice.starts_at));
+  date.dateTime=notice.starts_at;
+  bar.hidden=false;
+ }catch(error){console.warn("Latest school announcement could not be loaded.",error);}
+})();

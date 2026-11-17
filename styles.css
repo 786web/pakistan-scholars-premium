@@ -1551,3 +1551,19 @@ button,a{touch-action:manipulation}
 .loading-screen .loader-logo{width:88px;height:88px;flex:0 0 88px;border-radius:16px!important;background:#fff;overflow:hidden;box-shadow:0 12px 30px rgba(0,0,0,.2);animation:none!important;transform:none!important}
 .loading-screen .loader-logo img{display:block;width:100%;height:100%;max-width:100%;max-height:100%;padding:7px;object-fit:contain;object-position:center;border-radius:16px;background:#fff;position:relative;z-index:1}
 @media(max-width:700px){.loading-screen .loader-logo{width:78px;height:78px;flex-basis:78px}}
+
+
+/* Admin-managed latest announcement strip */
+.announcement-bar{position:relative;z-index:30;background:#101936;color:#fff;border-bottom:1px solid rgba(255,255,255,.12)}
+.announcement-bar[hidden]{display:none!important}
+.announcement-inner{min-height:52px;display:flex;align-items:center;gap:12px;padding-top:8px;padding-bottom:8px}
+.announcement-label{display:inline-flex;align-items:center;gap:8px;flex:0 0 auto;color:#ffd28a;font-size:9px;font-weight:900;letter-spacing:.14em;white-space:nowrap}
+.announcement-label i{width:7px;height:7px;border-radius:50%;background:#ff8a24;box-shadow:0 0 0 4px rgba(255,138,36,.15)}
+.announcement-type{flex:0 0 auto;padding:5px 8px;border:1px solid rgba(255,210,138,.32);border-radius:30px;color:#ffd28a;font-size:8px;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
+.announcement-copy{display:flex;align-items:baseline;gap:9px;min-width:0;flex:1 1 auto;line-height:1.45}
+.announcement-copy strong{color:#fff;font-size:12px;font-weight:800;white-space:nowrap}
+.announcement-copy span{color:rgba(255,255,255,.78);font-size:11px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.announcement-link{flex:0 0 auto;color:#ffd28a;font-size:10px;font-weight:800;text-decoration:none;white-space:nowrap}
+.announcement-link:hover{text-decoration:underline}
+.announcement-date{flex:0 0 auto;color:rgba(255,255,255,.55);font-size:9px;white-space:nowrap}
+@media(max-width:760px){.announcement-inner{min-height:0;display:flex;flex-wrap:wrap;gap:7px 10px;padding-top:10px;padding-bottom:10px}.announcement-label{font-size:8px}.announcement-type{font-size:7px;padding:4px 7px}.announcement-copy{order:3;flex-basis:100%;align-items:flex-start;flex-direction:column;gap:2px}.announcement-copy strong{font-size:11px;white-space:normal}.announcement-copy span{font-size:10px;white-space:normal;overflow:visible}.announcement-link{order:4;font-size:9px}.announcement-date{margin-left:auto;font-size:8px}}
