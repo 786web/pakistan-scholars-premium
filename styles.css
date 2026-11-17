@@ -903,3 +903,49 @@ body{
   .preview-hero:before{animation:none}
   .campus-card,.key-feature-card,.life-card,.published-gallery-card,.campus-image img,.preview-hero .btn-gold{transition:none!important}
 }
+
+/* NAVY / WHITE / ORANGE SCHOOL HOMEPAGE REDESIGN */
+:root{--green:#0A1F4D;--green2:#12346D;--gold:#FF7A00;--cream:#F4F7FC;--ink:#172743;--muted:#65738B;--line:#E1E7F0}
+.topbar{background:#0A1F4D;color:#eaf0fb}.topbar-inner{min-height:39px;height:auto;gap:18px}.topbar-contact{display:flex;align-items:center;gap:22px;flex-wrap:wrap}.topbar-contact a{color:#fff}.topbar-social{color:#FF7A00;font-weight:900;letter-spacing:.12em}
+.site-header{height:84px;background:#fff;border-bottom:1px solid #e8edf5;box-shadow:0 8px 24px rgba(10,31,77,.06)}
+.brand-mark{width:54px;height:54px;border-radius:50%;border:3px solid #0A1F4D;background:radial-gradient(circle at 35% 25%,#1d4484,#071633 72%);color:#fff;position:relative;box-shadow:0 4px 0 rgba(10,31,77,.12)}
+.brand-mark>span{font-family:var(--serif);font-size:17px;letter-spacing:-2px;transform:translateY(-3px)}.brand-mark i{position:absolute;bottom:3px;right:8px;font-style:normal;font-size:13px;color:#FF7A00}
+.brand-copy strong{font-size:12px;color:#0A1F4D;letter-spacing:.07em}.brand-copy small{color:#6c7890;letter-spacing:.09em}
+.main-nav{gap:clamp(12px,1.7vw,24px);font-size:11px}.main-nav>a:not(.nav-cta){color:#263b5d}.main-nav>a:not(.nav-cta):hover,.main-nav>a.active{color:#FF7A00}
+.nav-cta{background:#FF7A00;color:#fff;border-radius:5px;padding:13px 18px;box-shadow:0 5px 0 #d95e00}.nav-cta span{color:#fff}
+.school-home-hero{height:auto;min-height:600px;background:#0A1F4D;overflow:hidden;padding:70px 0}.school-home-hero:before,.school-home-hero:after{display:none}
+.school-hero-grid{display:grid;grid-template-columns:.95fr 1.05fr;align-items:center;gap:38px;position:relative;z-index:2}
+.school-hero-copy{padding:25px 0;color:#fff;position:relative;z-index:2}.school-hero-copy .eyebrow{color:#ffd1a6}.school-hero-copy .eyebrow>span{background:#FF7A00}
+.school-home-hero h1{font-family:var(--serif);font-size:clamp(43px,5vw,65px);line-height:1.08;letter-spacing:-.035em;color:#fff;margin:22px 0}.school-home-hero h1 em{color:#FF9A42;font-style:normal}
+.school-home-hero .hero-lead{font-size:16px;color:#e3eaf6;max-width:490px}.school-home-hero .hero-actions{gap:14px;flex-wrap:wrap}
+.school-home-hero .btn-gold{background:#FF7A00;color:#fff;border-radius:5px;box-shadow:0 5px 0 #c95700,0 14px 28px rgba(255,122,0,.2)}
+.btn-hero-outline{border:1px solid rgba(255,255,255,.65);color:#fff;border-radius:5px;background:transparent}.btn-hero-outline span{color:#FF7A00}
+.school-home-hero .hero-note{margin-top:38px}.school-home-hero .note-icon{border-color:#FF7A00;color:#FF7A00}
+.school-hero-photo{height:450px;position:relative;border-radius:10px 10px 70px 10px;overflow:hidden;box-shadow:0 22px 0 rgba(255,122,0,.16),0 35px 70px rgba(0,0,0,.3);border:5px solid rgba(255,255,255,.14)}
+.school-hero-photo img{height:100%;width:100%;object-fit:cover;object-position:center}.school-hero-photo:after{content:"";position:absolute;inset:45% 0 0;background:linear-gradient(transparent,rgba(4,18,44,.5))}
+.hero-photo-label{position:absolute;bottom:22px;left:24px;color:#fff;font-size:10px;letter-spacing:.18em;font-weight:800;z-index:2}.hero-photo-accent{position:absolute;right:0;top:0;width:12px;height:100%;background:#FF7A00;z-index:3}
+.home-features-section{position:relative;z-index:4;margin-top:-28px}.home-features-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.home-feature-card{display:flex;align-items:center;gap:18px;padding:24px 25px;background:#fff;border:1px solid #e7ebf2;border-radius:8px;box-shadow:0 14px 35px rgba(10,31,77,.10)}
+.home-feature-icon{width:48px;height:48px;flex:0 0 48px;border-radius:50%;display:grid;place-items:center;background:#fff1e5;color:#FF7A00;font-size:23px}
+.home-feature-card h3{margin:0 0 4px;color:#0A1F4D;font-family:var(--serif);font-size:18px}.home-feature-card p{margin:0;color:#65738B;font-size:11px;line-height:1.6}
+.classes-band{background:#0A1F4D;color:#fff;position:relative;overflow:hidden;padding-top:72px;padding-bottom:72px}.classes-band:after{content:"";position:absolute;right:-100px;top:-180px;width:420px;height:420px;border:1px solid rgba(255,122,0,.28);border-radius:50%;box-shadow:0 0 0 28px rgba(255,122,0,.05),0 0 0 65px rgba(255,255,255,.035)}
+.classes-band-inner{display:grid;grid-template-columns:.8fr 1.2fr;gap:50px;align-items:center;position:relative;z-index:1}.classes-band h2{font-family:var(--serif);font-size:clamp(32px,4vw,48px);line-height:1.15;margin:17px 0 0}
+.classes-band .eyebrow{color:#ffd1a6}.classes-band .eyebrow>span{background:#FF7A00}.class-paths{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.class-path{padding:21px 17px;border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.07);border-radius:8px;min-height:140px;display:flex;flex-direction:column;justify-content:flex-end}
+.class-path>span{color:#FF9A42;font-size:11px;font-weight:900;letter-spacing:.12em;margin-bottom:auto}.class-path strong{font-family:var(--serif);font-size:18px;color:#fff}.class-path small{font-size:10px;color:#d6e0f0;margin-top:6px;line-height:1.6}
+.home-intro-layout{background:#f5f7fb}.home-intro-grid{display:grid;grid-template-columns:.9fr 1.1fr .78fr;gap:28px;align-items:center}
+.why-choose-panel h2{font-family:var(--serif);font-size:clamp(34px,3.4vw,44px);color:#0A1F4D;margin:17px 0}.why-choose-panel h2 em{font-style:normal;color:#FF7A00}
+.why-choose-panel ul{list-style:none;padding:0;margin:22px 0;display:grid;gap:15px}.why-choose-panel li{position:relative;padding-left:29px;color:#44536b;font-size:12px;line-height:1.6}
+.why-choose-panel li:before{content:"✓";position:absolute;left:0;top:0;width:19px;height:19px;display:grid;place-items:center;background:#fff0e3;color:#e96b00;border-radius:50%;font-weight:900}
+.home-photo-mosaic{display:grid;grid-template-columns:1.25fr 1fr;grid-template-rows:145px 145px;gap:10px}.home-photo-mosaic img{height:100%;width:100%;object-fit:cover;border-radius:7px}.home-photo-mosaic .mosaic-main{grid-row:span 2}
+.admissions-promo-card{background:#FF7A00;color:#fff;border-radius:9px;padding:30px 25px;box-shadow:0 16px 35px rgba(255,122,0,.2);position:relative;overflow:hidden}
+.admissions-promo-card:after{content:"";position:absolute;right:-60px;bottom:-85px;width:180px;height:180px;border:1px solid rgba(255,255,255,.3);border-radius:50%;box-shadow:0 0 0 20px rgba(255,255,255,.08)}
+.promo-kicker{font-size:9px;font-weight:900;letter-spacing:.18em;color:#fff2e6}.admissions-promo-card h2{font-family:var(--serif);font-size:30px;line-height:1.15;margin:14px 0}.admissions-promo-card p{font-size:12px;line-height:1.7;color:#fff4eb}
+.btn-promo{background:#0A1F4D;color:#fff;border-radius:5px;margin-top:13px;padding:13px 15px;position:relative;z-index:1;gap:14px}.btn-promo span{color:#FF9A42}.admissions-promo-card small{display:block;margin-top:14px;color:#fff1e5;font-size:10px}
+.section-heading h2 em,.intro-copy h2 em,.founder-copy h2 em,.managing-director-copy h2 em{color:#FF7A00}.eyebrow{color:#0A1F4D}.eyebrow>span{background:#FF7A00}
+.campus-tag{background:#FF7A00;color:#fff}.values-band,.academics-section,.admissions-section{background:#0A1F4D}.contact-strip{background:#FF7A00}.btn-dark{background:#0A1F4D;color:#fff}.footer{background:#071633}.results-table th{background:#0A1F4D}.result-label,.result-year{color:#FF9A42}
+@media(max-width:1050px){.main-nav{gap:12px}.main-nav>a{font-size:10px}.home-intro-grid{grid-template-columns:1fr 1fr}.admissions-promo-card{grid-column:1/-1}.school-hero-photo{height:390px}}
+@media(max-width:760px){.topbar-inner{padding:7px 0}.topbar-contact{gap:8px 14px;justify-content:center;font-size:9px}.topbar-social{display:none}.site-header{height:72px}.brand-mark{width:45px;height:45px}.brand-copy strong{font-size:10px}.brand-copy small{font-size:7px}.main-nav{top:72px;background:#fff;box-shadow:0 18px 28px rgba(10,31,77,.14)}.main-nav>a:not(.nav-cta){color:#263b5d;border-bottom:1px solid #e8edf5}
+.school-home-hero{padding:50px 0 70px;min-height:0}.school-hero-grid{grid-template-columns:1fr;gap:30px}.school-home-hero h1{font-size:clamp(40px,10vw,55px)}.school-hero-photo{height:290px;border-radius:8px 8px 42px 8px}.school-home-hero .hero-note{margin-top:28px}
+.home-features-section{margin-top:-25px}.home-features-grid{grid-template-columns:1fr;gap:10px}.home-feature-card{padding:17px 19px}.classes-band-inner{grid-template-columns:1fr;gap:25px}.class-paths{grid-template-columns:1fr;gap:9px}.class-path{min-height:105px}.home-intro-grid{grid-template-columns:1fr;gap:25px}.home-photo-mosaic{grid-template-rows:125px 125px}.admissions-promo-card{grid-column:auto;padding:25px}.section-pad{padding-top:68px;padding-bottom:68px}}
+@media(max-width:390px){.topbar-contact a{font-size:8px}.brand-copy strong{font-size:9px}.school-hero-photo{height:240px}}
