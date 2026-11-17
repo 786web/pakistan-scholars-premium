@@ -1545,3 +1545,9 @@ button,a{touch-action:manipulation}
 @media(prefers-reduced-motion:reduce){
   .premium-hero:before,.premium-hero:after,.showcase-badge,.ticker-track{animation:none!important}
 }
+
+
+/* Use the exact school identity image in the initial loading screen. */
+.loading-screen .loader-logo{width:88px;height:88px;flex:0 0 88px;border-radius:16px!important;background:#fff;overflow:hidden;box-shadow:0 12px 30px rgba(0,0,0,.2);animation:none!important;transform:none!important}
+.loading-screen .loader-logo img{display:block;width:100%;height:100%;max-width:100%;max-height:100%;padding:7px;object-fit:contain;object-position:center;border-radius:16px;background:#fff;position:relative;z-index:1}
+@media(max-width:700px){.loading-screen .loader-logo{width:78px;height:78px;flex-basis:78px}}
