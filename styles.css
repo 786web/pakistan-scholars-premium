@@ -1207,3 +1207,71 @@ body.menu-open{overflow:hidden}
 @media(prefers-reduced-motion:reduce){
   .ticker-track,.loading-line i{animation:none!important}
 }
+
+
+/* Final 3D polish + official school emblem */
+.brand-mark{
+  overflow:hidden;border-radius:50%;flex:0 0 auto;
+  background:#fff;border:2px solid #E67E00;
+  box-shadow:0 5px 18px rgba(27,23,64,.16);
+}
+.brand-mark img{
+  display:block;width:100%;height:100%;max-width:100%;
+  object-fit:contain;object-position:center;border-radius:50%;
+  padding:2px;background:#fff;
+}
+.loader-logo{width:64px;height:64px}
+.site-header .brand-mark,.footer .brand-mark,.loading-screen .brand-mark{transform:none!important}
+.premium-hero{isolation:isolate}
+.premium-hero:before,.premium-hero:after{
+  display:block!important;content:"";position:absolute;pointer-events:none;
+  border:1px solid rgba(255,196,107,.22);border-radius:50%;
+  transform-style:preserve-3d;z-index:0;
+}
+.premium-hero:before{
+  width:clamp(250px,38vw,540px);height:clamp(250px,38vw,540px);
+  right:-10%;top:-34%;box-shadow:0 0 0 28px rgba(255,196,107,.035),0 0 0 66px rgba(255,196,107,.025);
+  animation:scholarsOrbit 24s linear infinite;
+}
+.premium-hero:after{
+  width:clamp(130px,20vw,250px);height:clamp(130px,20vw,250px);
+  right:10%;top:12%;border-color:rgba(255,255,255,.12);
+  animation:scholarsFloat 7s ease-in-out infinite;
+}
+.premium-hero-content{z-index:1}
+.showcase-frame,.campus-card,.life-card,.school-stat-card,.key-feature-card,.result-feature{
+  transform-style:preserve-3d;backface-visibility:hidden;
+  will-change:transform;transition:transform .38s cubic-bezier(.2,.75,.25,1),box-shadow .38s ease;
+}
+.showcase-frame{perspective:1100px;box-shadow:0 24px 60px rgba(27,23,64,.18)}
+.showcase-frame>img{transform:translateZ(0);transition:transform .8s cubic-bezier(.2,.7,.2,1)}
+.showcase-badge{transform:translateZ(35px);animation:scholarsFloat 5s ease-in-out infinite}
+.showcase-badge-right{animation-delay:-2.2s}
+.school-stat-card,.key-feature-card{transform:perspective(900px) translateZ(0)}
+.school-stat-card>strong,.key-feature-card>span{transform:translateZ(14px)}
+.campus-image img,.life-card img{transform:translateZ(0);transition:transform .7s cubic-bezier(.2,.7,.2,1)}
+.founder-visual,.managing-director-portrait{transform-style:preserve-3d;box-shadow:0 22px 55px rgba(27,23,64,.13)}
+.founder-photo,.managing-director-photo{transform:translateZ(18px);filter:drop-shadow(0 16px 24px rgba(0,0,0,.15))}
+.admission-form{transform-style:preserve-3d}
+.admission-form h3,.form-submit{transform:translateZ(12px)}
+@media (hover:hover) and (pointer:fine){
+  .showcase-frame:hover>img{transform:scale(1.035) translateZ(8px)}
+  .school-stat-card:hover,.key-feature-card:hover{
+    box-shadow:0 24px 48px rgba(27,23,64,.13);border-color:rgba(230,126,0,.35)
+  }
+  .campus-card:hover img,.life-card:hover img{transform:scale(1.055) translateZ(10px)}
+  .brand:hover .brand-mark{transform:none!important}
+}
+@keyframes scholarsOrbit{to{transform:rotate(360deg) rotateY(24deg)}}
+@keyframes scholarsFloat{0%,100%{transform:translate3d(0,0,0)}50%{transform:translate3d(0,-9px,12px)}}
+@media(max-width:700px){
+  .premium-hero:before{right:-42%;top:-16%;opacity:.7}
+  .premium-hero:after{right:-5%;top:24%;opacity:.55}
+  .showcase-frame{border-radius:22px}
+  .school-stat-card,.key-feature-card,.campus-card,.life-card,.result-feature{will-change:auto}
+  .founder-visual,.managing-director-portrait{box-shadow:0 14px 34px rgba(27,23,64,.12)}
+}
+@media(prefers-reduced-motion:reduce){
+  .premium-hero:before,.premium-hero:after,.showcase-badge{animation:none!important}
+  .showcase-frame,.campus-card,.life-card,.school-stat-card,.key-feature-card,.result-feature{will-change:auto}
+}
