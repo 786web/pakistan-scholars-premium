@@ -171,6 +171,10 @@ if (resultSearch) {
       });
       tbody.appendChild(row);
       });
+      Array.from(tbody.rows).sort((a,b) => {
+        const score = row => Number((row.cells[3]?.textContent || "0").split("/")[0].replace(/,/g,"")) || 0;
+        return score(b)-score(a);
+      }).forEach(row => tbody.appendChild(row));
     }
 
     // Public gallery only reads rows explicitly approved by the school admin.
