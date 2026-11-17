@@ -1275,3 +1275,55 @@ body.menu-open{overflow:hidden}
   .premium-hero:before,.premium-hero:after,.showcase-badge{animation:none!important}
   .showcase-frame,.campus-card,.life-card,.school-stat-card,.key-feature-card,.result-feature{will-change:auto}
 }
+
+
+/* Right-side school navigation drawer */
+.site-header{z-index:100}
+.menu-backdrop{
+  position:fixed;inset:0;z-index:99;border:0;padding:0;margin:0;
+  background:rgba(5,12,29,.58);backdrop-filter:blur(3px);
+  opacity:0;visibility:hidden;pointer-events:none;transition:opacity .28s ease,visibility .28s ease;
+}
+.menu-backdrop.is-visible{opacity:1;visibility:visible;pointer-events:auto}
+.main-nav{
+  display:flex;position:fixed;top:0;right:0;bottom:0;left:auto;z-index:101;
+  width:min(410px,90vw);max-width:100%;height:100dvh;overflow-y:auto;
+  flex-direction:column;align-items:stretch;justify-content:flex-start;gap:0;
+  padding:30px 30px 34px;background:linear-gradient(155deg,#0A1F4D 0%,#142B58 62%,#1B1740 100%);
+  color:#fff;box-shadow:-24px 0 70px rgba(0,0,0,.24);
+  opacity:1;visibility:hidden;transform:translateX(105%);
+  transition:transform .32s cubic-bezier(.2,.75,.25,1),visibility .32s;
+}
+.main-nav.open{display:flex;opacity:1;visibility:visible;transform:translateX(0)}
+.menu-heading{display:flex;justify-content:space-between;align-items:center;gap:18px;margin:0 0 24px;color:#fff}
+.menu-heading>div{display:flex;flex-direction:column;gap:5px}
+.menu-kicker{font:800 9px var(--sans);letter-spacing:.2em;color:#FF9A42}
+.menu-heading strong{font:600 25px/1.2 var(--serif);color:#fff}
+.menu-close{flex:0 0 42px;width:42px;height:42px;border:1px solid rgba(255,255,255,.25);border-radius:50%;background:#FF7A00;color:#fff;font-size:28px;line-height:1;cursor:pointer}
+.main-nav>a:not(.nav-cta){
+  display:flex;align-items:center;gap:17px;padding:11px 0;
+  border-bottom:1px solid rgba(255,255,255,.12);color:#fff;
+  font:600 18px/1.25 var(--serif);letter-spacing:0;
+  transition:color .2s ease,padding-left .2s ease;
+}
+.main-nav>a:not(.nav-cta):hover{color:#FFB36F;padding-left:5px}
+.main-nav>a:not(.nav-cta)>span{flex:0 0 22px;font:800 9px var(--sans);letter-spacing:.12em;color:#FF9A42}
+.main-nav .nav-cta{
+  display:flex;align-items:center;justify-content:space-between;margin-top:20px;
+  padding:14px 16px;border-radius:7px;background:#FF7A00;color:#fff;
+  font:800 11px var(--sans);letter-spacing:.04em;
+}
+.main-nav .nav-cta span{font-size:18px}
+.menu-contact{display:flex;flex-direction:column;gap:5px;margin-top:24px;padding-top:20px;border-top:1px solid rgba(255,255,255,.16)}
+.menu-contact>a{font:600 25px var(--serif);color:#FF9A42}
+.menu-contact small{font-size:9px;letter-spacing:.04em;color:#cbd5e5;line-height:1.6}
+body.menu-open{overflow:hidden}
+@media(max-width:700px){
+  .main-nav{width:min(370px,90vw);padding:24px 22px 28px}
+  .menu-heading{margin-bottom:18px}
+  .menu-heading strong{font-size:23px}
+  .main-nav>a:not(.nav-cta){font-size:17px;padding:10px 0}
+}
+@media(prefers-reduced-motion:reduce){
+  .main-nav,.menu-backdrop,.main-nav>a:not(.nav-cta){transition:none}
+}
