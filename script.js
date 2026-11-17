@@ -298,14 +298,16 @@ document.querySelectorAll(".profile-more-link").forEach((button) => {
       const selector = target.id === "key-features-grid" ? ".key-feature-card" :
         target.id === "resultsTable" ? "tbody tr" : ".published-gallery-card";
       const count = target.querySelectorAll(selector).length;
-      button.hidden = count <= (target.id === "publishedGalleryGrid" ? 6 : 3);
+      // Gallery photos are loaded asynchronously from Supabase after this preview
+      // initializer runs. Keep its control visible even when the first count is zero.
+      button.hidden = target.id === "publishedGalleryGrid" ? false : count <= 3;
     };
     updateButton();
     button.addEventListener("click", () => {
       const expanded = target.classList.toggle("is-expanded");
       button.innerHTML = expanded ? 'Show less <span>↑</span>' :
         (target.id === "key-features-grid" ? 'View all facilities <span>↗</span>' :
-         target.id === "resultsTable" ? 'View complete results <span>↗</span>' : 'View all photographs <span>↗</span>');
+         target.id === "resultsTable" ? 'View complete results <span>↗</span>'  : 'View more photographs <span>↗</span>');
       button.setAttribute("aria-expanded", String(expanded));
       if (expanded) target.scrollIntoView({behavior:"smooth",block:"nearest"});
     });
