@@ -213,3 +213,13 @@ if (resultSearch) {
   });
  }catch(error){console.warn("School logo could not be loaded.",error);}
 })();
+
+
+// Keep the school identity prominent at the top, then compact it while scrolling.
+(() => {
+  const header = document.querySelector(".site-header");
+  if (!header) return;
+  const updateHeader = () => header.classList.toggle("is-compact", window.scrollY > 45);
+  updateHeader();
+  window.addEventListener("scroll", updateHeader, { passive: true });
+})();
