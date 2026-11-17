@@ -1385,3 +1385,163 @@ body.menu-open{overflow:hidden}
   .menu-contact{margin-top:10px;padding-top:9px}
   .menu-contact>a{font-size:19px}
 }
+
+
+/* FINAL MOBILE FIT + PERFORMANCE PASS */
+/* Prevent accidental page-width overflow while preserving inner table scrolling. */
+html,body{max-width:100%;overflow-x:clip}
+img,video,iframe{max-width:100%}
+.container,.nav-wrap,.premium-hero-content,.intro-grid>*,.section-heading>*,.campus-info>*,.founder-grid>*,.managing-director-grid>*,.admissions-grid>*{min-width:0}
+body{overflow-wrap:break-word}
+button,a,input,select,textarea{-webkit-tap-highlight-color:transparent}
+button,a{touch-action:manipulation}
+
+@media(max-width:760px){
+  .container{width:calc(100% - 32px)}
+  .site-header{height:72px}
+  .nav-wrap{gap:9px}
+  .brand{min-width:0;flex:1;gap:9px}
+  .site-header .brand-mark{width:48px;height:48px;flex:0 0 48px}
+  .brand-copy{min-width:0;flex:1}
+  .brand-copy strong{font-size:clamp(14px,4.2vw,18px);line-height:1.12;letter-spacing:-.015em}
+  .brand-copy small{font-size:clamp(6px,1.8vw,8px);line-height:1.35;letter-spacing:.07em;overflow-wrap:anywhere}
+  .menu-toggle{width:42px;height:42px;flex:0 0 42px}
+  .site-header.is-compact{height:60px}
+  .site-header.is-compact .brand-mark{width:38px;height:38px;flex-basis:38px}
+  .site-header.is-compact .brand-copy strong{font-size:clamp(11px,3.3vw,14px)}
+  .site-header.is-compact .brand-copy small{font-size:6px}
+  .main-nav{width:min(360px,90vw);max-width:100%;padding:calc(16px + env(safe-area-inset-top)) 20px calc(18px + env(safe-area-inset-bottom));backdrop-filter:none}
+  .menu-backdrop{backdrop-filter:none}
+  .menu-heading{margin-bottom:14px}
+  .main-nav>a:not(.nav-cta){font-size:clamp(15px,4.2vw,17px);line-height:1.25;min-height:36px}
+  .menu-contact small{overflow-wrap:anywhere;line-height:1.55}
+
+  .premium-hero{padding:52px 0 30px;min-height:0}
+  .premium-hero h1{font-size:clamp(42px,11.5vw,60px);line-height:1.02;overflow-wrap:normal}
+  .premium-hero .hero-lead{font-size:13px;line-height:1.75}
+  .premium-hero .hero-actions{max-width:none}
+  .premium-hero .btn{min-height:48px}
+  .premium-stats{gap:8px;margin-top:28px;padding-top:17px}
+  .premium-stats>div{min-width:0}
+  .premium-stats small{font-size:clamp(6px,1.8vw,7px);letter-spacing:.06em;overflow-wrap:anywhere}
+  .premium-stats strong{font-size:clamp(19px,5.5vw,26px)}
+  .premium-hero:before,.premium-hero:after,.showcase-badge{animation:none!important}
+  .premium-hero:before{opacity:.35}
+  .showcase-frame{height:clamp(210px,68vw,360px);border-radius:20px}
+  .showcase-frame>img{object-position:center}
+  .showcase-badge{bottom:10px;padding:8px 10px;border-radius:11px}
+  .showcase-badge-left{left:10px}
+  .showcase-badge-right{right:10px}
+  .showcase-badge small{font-size:6px;letter-spacing:.06em}
+  .showcase-badge strong{font-size:clamp(16px,4.8vw,20px)}
+  .showcase-caption{gap:10px}
+  .showcase-caption span{font-size:7px;letter-spacing:.11em}
+
+  .section-pad{padding-top:58px;padding-bottom:58px}
+  .section-heading{display:grid;grid-template-columns:minmax(0,1fr);gap:12px;margin-bottom:25px}
+  .section-heading h2,.intro-copy h2,.founder-copy h2,.managing-director-copy h2{font-size:clamp(35px,9vw,46px);line-height:1.08}
+  .section-heading>p{max-width:none;margin:0;font-size:12px;line-height:1.75}
+  .intro-grid,.founder-grid,.managing-director-grid,.academics-grid,.admissions-grid{grid-template-columns:minmax(0,1fr);gap:30px}
+  .intro-visual{padding:0 12px 20px 0}
+  .intro-main-img{height:clamp(220px,72vw,330px)}
+  .intro-caption{max-width:calc(100% - 18px);font-size:9px;padding:9px 12px}
+  .mini-stats{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-top:24px;padding-top:18px}
+  .mini-stats strong{font-size:24px}
+  .mini-stats span{font-size:8px}
+
+  .school-stats-grid,.campus-grid,.key-features-grid{grid-template-columns:minmax(0,1fr)}
+  .school-stat-card,.key-feature-card,.campus-card{min-width:0}
+  .campus-info{gap:10px;padding:17px}
+  .campus-info h3{font-size:clamp(20px,6vw,24px);line-height:1.2;overflow-wrap:anywhere}
+  .campus-info p{line-height:1.55;overflow-wrap:anywhere}
+  .campus-info .round-arrow{flex:0 0 36px}
+  .key-feature-card{gap:13px;padding:18px}
+  .key-feature-card h3{font-size:16px;overflow-wrap:anywhere}
+  .key-feature-card p{font-size:11px}
+
+  .founder-visual{min-height:clamp(350px,112vw,450px);padding:24px 14px 70px}
+  .founder-visual:before{width:min(88%,300px);height:82%}
+  .founder-visual:after{width:min(86%,290px);height:80%}
+  .founder-photo{max-width:min(100%,270px);max-height:330px}
+  .founder-caption{left:10px;right:10px;font-size:7px;letter-spacing:.09em}
+  .managing-director-portrait{min-height:clamp(330px,100vw,400px);padding:22px 14px 70px}
+  .managing-director-photo{max-width:min(100%,270px);max-height:300px}
+  .managing-director-caption{left:10px;right:10px;font-size:7px;letter-spacing:.09em}
+  .founder-role{font-size:19px;line-height:1.3}
+  .founder-copy>p:not(.founder-role),.managing-director-copy>p:not(.founder-role){font-size:12px;line-height:1.8}
+  .founder-vision{padding:16px}
+
+  .feature-item{grid-template-columns:28px minmax(0,1fr) 20px;gap:11px;padding:19px 0}
+  .feature-item h3{font-size:16px;line-height:1.35}
+  .feature-item p{font-size:10px;line-height:1.65}
+  .result-feature{min-width:0}
+  .result-left{min-height:clamp(390px,120vw,470px);padding:24px 18px}
+  .result-score{font-size:clamp(48px,13vw,62px);line-height:1.05}
+  .result-score span{font-size:15px}
+  .result-student{font-size:20px;line-height:1.25}
+  .result-student span{display:block;margin-top:3px}
+  .results-tools{display:flex;flex-direction:column;align-items:stretch;gap:10px}
+  .results-tools input{width:100%;min-width:0;height:44px}
+  .results-table-wrap{max-width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch}
+  .results-table{min-width:520px}
+  .results-table th,.results-table td{padding:10px 12px;font-size:10px}
+  .archive-row{display:block;overflow-wrap:anywhere}
+  .archive-row .under-link{margin-top:12px}
+  .result-years{flex-wrap:wrap;gap:8px}
+
+  .life-grid{grid-template-columns:minmax(0,1fr) minmax(0,1fr);grid-template-rows:minmax(185px,56vw) minmax(150px,45vw);gap:10px}
+  .life-large{grid-column:1/-1}
+  .life-overlay{padding:12px}
+  .life-overlay h3{font-size:clamp(16px,4.8vw,20px);line-height:1.2}
+  .life-overlay p{font-size:9px;line-height:1.5}
+
+  .admission-form{padding:22px 17px}
+  .admission-form h3{font-size:23px}
+  .admission-form input,.admission-form select{min-width:0;font-size:14px}
+  .form-row{grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px}
+  .contact-inner{align-items:flex-start;flex-direction:column;gap:14px}
+  .contact-inner h2{font-size:clamp(21px,6vw,26px);line-height:1.25}
+  .contact-campus-links{gap:10px 14px}
+  .footer-main{grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:24px}
+  .footer-main>div{min-width:0;overflow-wrap:anywhere}
+  .footer-main>div>a:not(.brand),.footer-main>div>span{overflow-wrap:anywhere}
+  .footer-bottom{gap:8px;line-height:1.6}
+  .whatsapp-float{right:14px;bottom:max(14px,env(safe-area-inset-bottom));width:46px;height:46px}
+
+  /* Keep touch scrolling smooth; avoid costly hover/3D work on phones. */
+  .campus-card,.key-feature-card,.life-card,.published-gallery-card,.school-stat-card,.result-feature,.showcase-frame{
+    transform:none!important;will-change:auto;transition:box-shadow .2s ease;
+  }
+  .campus-card:hover,.key-feature-card:hover,.life-card:hover,.published-gallery-card:hover{transform:none!important}
+  .campus-image img,.life-card img,.showcase-frame>img{transition:none}
+  .founder-visual,.managing-director-portrait{box-shadow:0 12px 28px rgba(27,23,64,.10)}
+}
+@media(max-width:390px){
+  .container{width:calc(100% - 28px)}
+  .site-header .brand-mark{width:43px;height:43px;flex-basis:43px}
+  .brand-copy strong{font-size:clamp(13px,4vw,16px)}
+  .brand-copy small{font-size:6px;letter-spacing:.045em}
+  .menu-toggle{width:40px;height:40px;flex-basis:40px}
+  .premium-hero{padding-top:46px}
+  .premium-hero h1{font-size:clamp(40px,11.4vw,49px)}
+  .premium-stats{gap:5px}
+  .showcase-badge{max-width:47%}
+  .showcase-badge strong{font-size:16px}
+  .mini-stats{gap:9px}
+  .mini-stats strong{font-size:22px}
+  .form-row{grid-template-columns:minmax(0,1fr)}
+  .footer-main{grid-template-columns:minmax(0,1fr)}
+  .life-grid{grid-template-rows:minmax(175px,58vw) minmax(145px,47vw)}
+}
+@media(max-height:650px) and (max-width:760px){
+  .main-nav{padding-top:calc(10px + env(safe-area-inset-top));padding-bottom:calc(10px + env(safe-area-inset-bottom))}
+  .menu-heading{margin-bottom:8px}
+  .main-nav>a:not(.nav-cta){min-height:32px;padding:6px 0}
+  .menu-contact{margin-top:12px;padding-top:10px}
+}
+@media(hover:none),(pointer:coarse){
+  .campus-card:hover,.key-feature-card:hover,.life-card:hover,.published-gallery-card:hover{transform:none!important}
+}
+@media(prefers-reduced-motion:reduce){
+  .premium-hero:before,.premium-hero:after,.showcase-badge,.ticker-track{animation:none!important}
+}
