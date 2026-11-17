@@ -493,3 +493,51 @@
 .profile-more-link:focus-visible{outline:2px solid currentColor;outline-offset:3px;border-radius:2px}
 @keyframes profileReveal{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}
 @media(prefers-reduced-motion:reduce){.profile-extra:not([hidden]){animation:none}}
+
+
+/* Improve leadership heading and campus label readability on desktop and mobile. */
+.founder-copy>.eyebrow,
+.managing-director-copy>.eyebrow{
+  font-size:13px;
+  line-height:1.5;
+  letter-spacing:.16em;
+  gap:13px;
+}
+.founder-copy>.eyebrow>span,
+.managing-director-copy>.eyebrow>span{
+  width:34px;
+  flex:0 0 34px;
+}
+.founder-copy h2,
+.managing-director-copy h2{
+  font-size:clamp(42px,4.5vw,57px);
+  line-height:1.13;
+}
+.founder-copy>p:not(.founder-role),
+.managing-director-copy>p:not(.founder-role){
+  font-size:14px;
+  line-height:1.85;
+}
+@media(max-width:700px){
+  .founder-copy>.eyebrow,
+  .managing-director-copy>.eyebrow{
+    font-size:11px;
+    letter-spacing:.12em;
+    gap:9px;
+  }
+  .founder-copy>.eyebrow>span,
+  .managing-director-copy>.eyebrow>span{
+    width:24px;
+    flex-basis:24px;
+  }
+  .founder-copy h2,
+  .managing-director-copy h2{
+    font-size:44px;
+    line-height:1.14;
+  }
+  .founder-copy>p:not(.founder-role),
+  .managing-director-copy>p:not(.founder-role){
+    font-size:13px;
+    line-height:1.85;
+  }
+}
