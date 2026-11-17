@@ -274,8 +274,8 @@ document.querySelectorAll(".profile-more-link").forEach((button) => {
   document.getElementById("announcementTitle").textContent=notice.title;
   document.getElementById("announcementMessage").textContent=notice.message;
   const link=document.getElementById("announcementLink");
-  if(notice.link_url&&/^https?:\\/\\//i.test(notice.link_url)){
-   link.href=notice.link_url;link.textContent=(notice.link_label||"More information")+" ↗";link.hidden=false;
+  if(notice.link_url){
+   try{const safeLink=new URL(notice.link_url);if(safeLink.protocol==="https:"||safeLink.protocol==="http:"){link.href=safeLink.href;link.textContent=(notice.link_label||"More information")+" ↗";link.hidden=false;}}catch{}
   }
   const date=document.getElementById("announcementDate");
   date.textContent=new Intl.DateTimeFormat("en-PK",{day:"numeric",month:"short",year:"numeric"}).format(new Date(notice.starts_at));
