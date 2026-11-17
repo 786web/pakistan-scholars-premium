@@ -5,19 +5,34 @@ menuToggle.addEventListener("click", () => {
   const isOpen = mainNav.classList.toggle("open");
   menuToggle.setAttribute("aria-expanded", String(isOpen));
   menuToggle.setAttribute("aria-label", isOpen ? "Close navigation" : "Open navigation");
-  menuToggle.textContent = isOpen ? "×" : "☰";
+  document.body.classList.toggle("menu-open", isOpen);
+  menuToggle.classList.toggle("is-open", isOpen);
 });
 
+const closeMenu = () => {
+  mainNav.classList.remove("open");
+  menuToggle.setAttribute("aria-expanded", "false");
+  menuToggle.setAttribute("aria-label", "Open navigation");
+  menuToggle.classList.remove("is-open");
+  document.body.classList.remove("menu-open");
+};
+const menuClose = document.getElementById("menuClose");
+if (menuClose) menuClose.addEventListener("click", closeMenu);
 mainNav.querySelectorAll("a").forEach((link) => {
   link.addEventListener("click", () => {
-    mainNav.classList.remove("open");
-    menuToggle.setAttribute("aria-expanded", "false");
-    menuToggle.setAttribute("aria-label", "Open navigation");
-    menuToggle.textContent = "☰";
+    closeMenu();
   });
 });
 
 document.getElementById("year").textContent = new Date().getFullYear();
+
+// Dismiss the branded loading screen after the page assets have had a moment to settle.
+window.addEventListener("load", () => {
+  window.setTimeout(() => {
+    const loader = document.getElementById("loadingScreen");
+    if (loader) loader.classList.add("is-hidden");
+  }, 650);
+});
 
 const admissionForm = document.getElementById("admissionForm");
 admissionForm.addEventListener("submit", (event) => {
@@ -26,7 +41,7 @@ admissionForm.addEventListener("submit", (event) => {
 
   const data = new FormData(admissionForm);
   const message = [
-    "Assalam-o-Alaikum Pakistan Scholars High School,",
+    "Assalam-o-Alaikum Pakistan Scholars Educational System,",
     "",
     "I would like to enquire about admission.",
     "Parent / Guardian: " + data.get("parentName"),
@@ -205,7 +220,7 @@ if (resultSearch) {
   const url=base+(base.includes("?")?"&":"?")+"v="+encodeURIComponent(data.updated_at||Date.now());
   document.querySelectorAll(".brand-mark").forEach(mark=>{
    const img=document.createElement("img");
-   img.src=url;img.alt="Pakistan Scholars High School logo";img.loading="eager";img.decoding="async";
+   img.src=url;img.alt="Pakistan Scholars Educational System logo";img.loading="eager";img.decoding="async";
    img.onerror=()=>{console.warn("Uploaded school logo could not be displayed:",url);};
    mark.replaceChildren(img);
    mark.setAttribute("aria-label","Pakistan Scholars High School logo");
