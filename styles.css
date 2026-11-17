@@ -498,3 +498,9 @@
 .quick-sidebar a:hover{transform:translateY(-3px);background:#17366b;color:#fff}
 @media(max-width:700px){.quick-sidebar{right:10px;bottom:92px;gap:6px}.quick-sidebar a{width:37px;height:37px;font-size:15px}}
 @media(prefers-reduced-motion:reduce){.hero-slide,.site-header,.site-header .brand-copy strong,.site-header .brand-copy small,.leadership-more-content{transition:none;animation:none}}
+
+
+/* Keep every school logo still; use a larger mark in both header and footer. */
+.brand-mark{animation:none!important;transform:none!important;width:64px;height:64px;flex:0 0 64px}
+.brand-mark img{padding:3px}
+@media(max-width:700px){.footer .brand-mark{width:54px;height:54px;flex-basis:54px}}
