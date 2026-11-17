@@ -479,3 +479,18 @@
   .site-header.is-compact .brand-copy small{font-size:7px}
   .site-header.is-compact .main-nav{top:58px}
 }
+
+
+/* Expandable leadership biographies */
+.profile-extra[hidden]{display:none!important}
+.profile-extra:not([hidden]){display:block;animation:profileReveal .28s ease both}
+.profile-more-btn{
+  display:inline-flex;align-items:center;gap:10px;margin-top:12px;padding:11px 18px;
+  border:1px solid #BFD0E6;border-radius:4px;background:#fff;color:#17366B;
+  font:700 12px "DM Sans",sans-serif;letter-spacing:.04em;cursor:pointer;
+  transition:background .2s ease,color .2s ease,border-color .2s ease;
+}
+.profile-more-btn:hover{background:#17366B;color:#fff;border-color:#17366B}
+.profile-more-btn span{font-size:16px;line-height:1}
+@keyframes profileReveal{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}
+@media(prefers-reduced-motion:reduce){.profile-extra:not([hidden]){animation:none}}
