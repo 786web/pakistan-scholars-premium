@@ -7,6 +7,7 @@ menuToggle.addEventListener("click", () => {
   menuToggle.setAttribute("aria-label", isOpen ? "Close navigation" : "Open navigation");
   document.body.classList.toggle("menu-open", isOpen);
   menuToggle.classList.toggle("is-open", isOpen);
+  document.getElementById("menuBackdrop")?.classList.toggle("is-visible", isOpen);
 });
 
 const closeMenu = () => {
@@ -14,10 +15,14 @@ const closeMenu = () => {
   menuToggle.setAttribute("aria-expanded", "false");
   menuToggle.setAttribute("aria-label", "Open navigation");
   menuToggle.classList.remove("is-open");
+  document.getElementById("menuBackdrop")?.classList.remove("is-visible");
   document.body.classList.remove("menu-open");
 };
 const menuClose = document.getElementById("menuClose");
 if (menuClose) menuClose.addEventListener("click", closeMenu);
+const menuBackdrop = document.getElementById("menuBackdrop");
+if (menuBackdrop) menuBackdrop.addEventListener("click", closeMenu);
+document.addEventListener("keydown", (event) => { if (event.key === "Escape") closeMenu(); });
 mainNav.querySelectorAll("a").forEach((link) => {
   link.addEventListener("click", () => {
     closeMenu();
