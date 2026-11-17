@@ -1327,3 +1327,61 @@ body.menu-open{overflow:hidden}
 @media(prefers-reduced-motion:reduce){
   .main-nav,.menu-backdrop,.main-nav>a:not(.nav-cta){transition:none}
 }
+
+
+/* Phone-first refinements for the school navigation drawer */
+@media(max-width:600px){
+  .main-nav{
+    width:min(340px,88vw);
+    height:100vh;
+    height:100dvh;
+    padding:calc(14px + env(safe-area-inset-top)) 18px calc(14px + env(safe-area-inset-bottom));
+    overflow-x:hidden;
+    overflow-y:auto;
+    overscroll-behavior:contain;
+    -webkit-overflow-scrolling:touch;
+  }
+  .menu-heading{
+    position:sticky;
+    top:calc(-14px - env(safe-area-inset-top));
+    z-index:2;
+    margin:0 -2px 12px;
+    padding:8px 2px 12px;
+    background:linear-gradient(155deg,#0A1F4D 0%,#102754 100%);
+  }
+  .menu-heading strong{font-size:21px}
+  .menu-close{width:38px;height:38px;flex-basis:38px;font-size:25px}
+  .main-nav>a:not(.nav-cta){
+    min-height:36px;
+    padding:8px 0;
+    gap:12px;
+    font-size:16px;
+    line-height:1.15;
+  }
+  .main-nav>a:not(.nav-cta)>span{flex-basis:20px;font-size:9px}
+  .main-nav .nav-cta{
+    min-height:44px;
+    margin-top:14px;
+    padding:11px 13px;
+  }
+  .menu-contact{
+    margin-top:16px;
+    padding-top:13px;
+    padding-bottom:4px;
+  }
+  .menu-contact>a{font-size:22px}
+  .menu-contact small{font-size:9px}
+}
+@media(max-width:380px){
+  .main-nav{width:90vw;padding-left:15px;padding-right:15px}
+  .menu-heading strong{font-size:19px}
+  .main-nav>a:not(.nav-cta){font-size:15px;min-height:34px;padding:7px 0}
+}
+@media(max-height:650px) and (max-width:600px){
+  .menu-heading{margin-bottom:7px;padding-bottom:8px}
+  .menu-heading strong{font-size:19px}
+  .main-nav>a:not(.nav-cta){min-height:31px;padding:6px 0;font-size:15px}
+  .main-nav .nav-cta{min-height:40px;margin-top:10px}
+  .menu-contact{margin-top:10px;padding-top:9px}
+  .menu-contact>a{font-size:19px}
+}
