@@ -9,6 +9,7 @@ $("logout").onclick=async()=>{await db.auth.signOut();location.reload();};
 document.querySelectorAll("[data-tab]").forEach(b=>b.onclick=()=>{document.querySelectorAll("[data-tab]").forEach(x=>x.classList.toggle("active",x===b));document.querySelectorAll(".panel").forEach(x=>x.hidden=x.id!=="p-"+b.dataset.tab);});
 async function load(){
  await loadSchoolLogo();
+ await loadMedia();
  const [r,g,e,a]=await Promise.all([
   db.from("school_results").select("*").order("year",{ascending:false}),
   db.from("school_gallery").select("*").order("created_at",{ascending:false}),
@@ -76,6 +77,46 @@ async function deleteGallery(id){
  const{error}=await db.from("school_gallery").delete().eq("id",id);if(error)throw error;
  say("galleryStatus","Photo and stored copies deleted.");
 }
+
+async function loadMedia(){
+ const{data,error}=await db.from("school_gallery").select("*").eq("campus","Website").order("created_at",{ascending:false});
+ if(error){say("mediaStatus",error.message);return;}
+ $("mediaList").innerHTML='<table><tr><th>Position</th><th>Preview</th><th>Status</th><th>Actions</th></tr>'+(data||[]).map(x=>{
+  const url=x.public_image_path?db.storage.from(PUBLIC_BUCKET).getPublicUrl(x.public_image_path).data.publicUrl:x.image_path?db.storage.from(PRIVATE_BUCKET).getPublicUrl(x.image_path).data.publicUrl:null;
+  const preview=url?'<a href="'+esc(url)+'" target="_blank" rel="noopener">View image</a>':'—';
+  const actions=(x.is_published?'<button class="btn small" data-media-action="unpublish" data-id="'+x.id+'">Unpublish</button>':'<button class="btn small" data-media-action="publish" data-id="'+x.id+'">Publish</button>')+' <button class="btn small danger" data-media-action="delete" data-id="'+x.id+'">Delete</button>';
+  return '<tr><td>'+esc(x.title)+'</td><td>'+preview+'</td><td>'+(x.is_published?'Published':'Private draft')+'</td><td class="gallery-actions">'+actions+'</td></tr>';
+ }).join("")+'</table>'+(data?.length?"":"<p>No website image replacements uploaded yet.</p>");
+}
+$("mediaForm").onsubmit=async e=>{
+ e.preventDefault();const f=new FormData(e.currentTarget),file=f.get("photo"),slot=f.get("slot");
+ if(!file||file.size>8*1024*1024){say("mediaStatus","Select an image up to 8 MB.");return;}
+ if(!["image/jpeg","image/png","image/webp"].includes(file.type)){say("mediaStatus","Only JPG, PNG and WebP are allowed.");return;}
+ const ext=file.name.split(".").pop().toLowerCase(),path="website/"+slot+"/"+crypto.randomUUID()+"."+ext;
+ say("mediaStatus","Uploading private image…");
+ const up=await db.storage.from(PRIVATE_BUCKET).upload(path,file,{contentType:file.type});
+ if(up.error){say("mediaStatus",up.error.message);return;}
+ const{error}=await db.from("school_gallery").insert({campus:"Website",title:slot,alt_text:f.get("alt_text")||slot.replaceAll("-"," "),image_path:path,is_published:false,public_image_path:null});
+ if(error){await db.storage.from(PRIVATE_BUCKET).remove([path]);say("mediaStatus",error.message);return;}
+ e.currentTarget.reset();say("mediaStatus","Uploaded as private draft. Publish it below to replace the live website image.");await loadMedia();
+};
+$("mediaList").addEventListener("click",async event=>{
+ const button=event.target.closest("[data-media-action]");if(!button)return;
+ button.disabled=true;const id=button.dataset.id,action=button.dataset.mediaAction;
+ try{
+  const row=await getGalleryRow(id);
+  if(action==="publish"){
+   const{data:old,error}=await db.from("school_gallery").select("id").eq("campus","Website").eq("title",row.title).eq("is_published",true);
+   if(error)throw error;
+   for(const item of old||[])await unpublishGallery(item.id);
+   await publishGallery(id);
+  }else if(action==="unpublish")await unpublishGallery(id);
+  else if(action==="delete"&&window.confirm("Permanently delete this website image and its stored files?"))await deleteGallery(id);
+  say("mediaStatus",action==="delete"?"Website image deleted.":action==="unpublish"?"Website image unpublished.":"Website image published and applied.");
+ }catch(error){say("mediaStatus",error.message||"Image action failed.");}
+ finally{button.disabled=false;await loadMedia();}
+});
+
 $("resultForm").onsubmit=async e=>{e.preventDefault();const f=new FormData(e.currentTarget),v=Object.fromEntries(f);["year","marks_obtained","total_marks"].forEach(k=>v[k]=Number(v[k]));v.is_published=false;const{error}=await db.from("school_results").insert(v);say("resultStatus",error?.message||"Saved as draft. Review before publishing.");if(!error){e.currentTarget.reset();await load();}};
 $("galleryForm").onsubmit=async e=>{e.preventDefault();const f=new FormData(e.currentTarget),file=f.get("photo");if(!file||file.size>8*1024*1024){say("galleryStatus","Select an image up to 8 MB.");return;}if(!["image/jpeg","image/png","image/webp"].includes(file.type)){say("galleryStatus","Only JPG, PNG and WebP files are allowed.");return;}const ext=file.name.split(".").pop().toLowerCase();const path=f.get("campus").toLowerCase().replaceAll(" ","-")+"/"+crypto.randomUUID()+"."+ext;say("galleryStatus","Uploading privately…");const up=await db.storage.from(PRIVATE_BUCKET).upload(path,file,{contentType:file.type});if(up.error){say("galleryStatus",up.error.message);return;}const{error}=await db.from("school_gallery").insert({campus:f.get("campus"),title:f.get("title"),alt_text:f.get("alt_text"),image_path:path,is_published:false,public_image_path:null});say("galleryStatus",error?.message||"Uploaded privately as a draft. Press Publish only after school approval.");if(!error){e.currentTarget.reset();await load();}};
 $("eventForm").onsubmit=async e=>{e.preventDefault();const f=new FormData(e.currentTarget),v=Object.fromEntries(f);v.event_date=v.event_date||null;v.is_published=false;const{error}=await db.from("school_events").insert(v);say("eventStatus",error?.message||"Event saved as draft.");if(!error){e.currentTarget.reset();await load();}};
