@@ -31,6 +31,32 @@ mainNav.querySelectorAll("a").forEach((link) => {
 
 document.getElementById("year").textContent = new Date().getFullYear();
 
+// Floating WhatsApp contact: let visitors choose the campus first.
+(() => {
+  const trigger = document.getElementById("whatsappFloat");
+  const dialog = document.getElementById("whatsappCampusDialog");
+  const close = document.getElementById("whatsappDialogClose");
+  if (!trigger || !dialog || !close) return;
+  const closeDialog = () => {
+    dialog.hidden = true;
+    trigger.setAttribute("aria-expanded", "false");
+    trigger.focus();
+  };
+  trigger.addEventListener("click", () => {
+    dialog.hidden = false;
+    trigger.setAttribute("aria-expanded", "true");
+    close.focus();
+  });
+  close.addEventListener("click", closeDialog);
+  dialog.addEventListener("click", (event) => {
+    if (event.target === dialog) closeDialog();
+  });
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && !dialog.hidden) closeDialog();
+  });
+})();
+
+
 // Dismiss the branded loading screen after the page assets have had a moment to settle.
 window.addEventListener("load", () => {
   window.setTimeout(() => {
