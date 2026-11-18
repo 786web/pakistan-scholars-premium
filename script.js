@@ -399,14 +399,15 @@ document.querySelectorAll(".profile-more-link").forEach((button) => {
     });
   });
 
-  // Sort the short results preview by marks so visitors immediately see leading achievements.
+  // Keep the results archive in chronological year order (oldest to newest).
   const table = document.getElementById("resultsTable");
   const body = table?.querySelector("tbody");
   if (body) {
     const rows = Array.from(body.rows);
     rows.sort((a,b) => {
-      const score = row => Number((row.cells[3]?.textContent || "0").split("/")[0].replace(/,/g,"")) || 0;
-      return score(b)-score(a);
+      const yearA = Number(a.cells[0]?.textContent) || 0;
+      const yearB = Number(b.cells[0]?.textContent) || 0;
+      return yearA - yearB || (a.cells[1]?.textContent || "").localeCompare(b.cells[1]?.textContent || "");
     });
     rows.forEach(row => body.appendChild(row));
   }
