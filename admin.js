@@ -107,7 +107,7 @@ async function loadMedia(){
  $("mediaList").innerHTML='<table><tr><th>Position</th><th>Preview</th><th>Status</th><th>Actions</th></tr>'+rows.join("")+'</table>'+(data?.length?"":"<p>No website image replacements uploaded yet.</p>");
 }
 $("mediaForm").onsubmit=async e=>{
- e.preventDefault();const f=new FormData(e.currentTarget),file=f.get("photo"),slot=f.get("slot");
+ e.preventDefault();const form=e.currentTarget;const f=new FormData(form),file=f.get("photo"),slot=f.get("slot");
  if(!file||file.size>8*1024*1024){say("mediaStatus","Select an image up to 8 MB.");return;}
  if(!["image/jpeg","image/png","image/webp"].includes(file.type)){say("mediaStatus","Only JPG, PNG and WebP are allowed.");return;}
  try{
@@ -117,7 +117,7 @@ $("mediaForm").onsubmit=async e=>{
   if(up.error)throw up.error;
   const{error}=await db.from("school_gallery").insert({campus:"Website",title:slot,alt_text:f.get("alt_text")||slot.replaceAll("-"," "),image_path:null,is_published:true,public_image_path:path});
   if(error){await db.storage.from(PUBLIC_BUCKET).remove([path]);throw error;}
-  e.currentTarget.reset();say("mediaStatus","Uploaded and published. The website image is now live.");await loadMedia();
+  form.reset();say("mediaStatus","Uploaded and published. The website image is now live.");await loadMedia();
  }catch(error){say("mediaStatus",error.message||"Upload failed.");}
 };
 $("mediaList").addEventListener("click",async event=>{
@@ -138,9 +138,9 @@ $("mediaList").addEventListener("click",async event=>{
 });
 
 
-$("resultForm").onsubmit=async e=>{e.preventDefault();const f=new FormData(e.currentTarget),v=Object.fromEntries(f);["year","marks_obtained","total_marks"].forEach(k=>v[k]=Number(v[k]));v.is_published=false;const{error}=await db.from("school_results").insert(v);say("resultStatus",error?.message||"Saved as draft. Review before publishing.");if(!error){e.currentTarget.reset();await load();}};
-$("galleryForm").onsubmit=async e=>{e.preventDefault();const f=new FormData(e.currentTarget),file=f.get("photo");if(!file||file.size>8*1024*1024){say("galleryStatus","Select an image up to 8 MB.");return;}if(!["image/jpeg","image/png","image/webp"].includes(file.type)){say("galleryStatus","Only JPG, PNG and WebP files are allowed.");return;}try{say("galleryStatus","Optimizing and uploading directly to public gallery…");const blob=await makeWebImage(file);const path=f.get("campus").toLowerCase().replaceAll(" ","-")+"/"+crypto.randomUUID()+".webp";const up=await db.storage.from(PUBLIC_BUCKET).upload(path,blob,{contentType:"image/webp",cacheControl:"31536000"});if(up.error)throw up.error;const{error}=await db.from("school_gallery").insert({campus:f.get("campus"),title:f.get("title"),alt_text:f.get("alt_text"),image_path:null,is_published:true,public_image_path:path});if(error){await db.storage.from(PUBLIC_BUCKET).remove([path]);throw error;}say("galleryStatus","Uploaded and published directly to the public gallery.");e.currentTarget.reset();await load();}catch(error){say("galleryStatus",error.message||"Upload failed.");}};
-$("eventForm").onsubmit=async e=>{e.preventDefault();const f=new FormData(e.currentTarget),v=Object.fromEntries(f);v.event_date=v.event_date||null;v.is_published=false;const{error}=await db.from("school_events").insert(v);say("eventStatus",error?.message||"Event saved as draft.");if(!error){e.currentTarget.reset();await load();}};
+$("resultForm").onsubmit=async e=>{e.preventDefault();const form=e.currentTarget;const f=new FormData(form),v=Object.fromEntries(f);["year","marks_obtained","total_marks"].forEach(k=>v[k]=Number(v[k]));v.is_published=false;const{error}=await db.from("school_results").insert(v);say("resultStatus",error?.message||"Saved as draft. Review before publishing.");if(!error){form.reset();await load();}};
+$("galleryForm").onsubmit=async e=>{e.preventDefault();const form=e.currentTarget;const f=new FormData(form),file=f.get("photo");if(!file||file.size>8*1024*1024){say("galleryStatus","Select an image up to 8 MB.");return;}if(!["image/jpeg","image/png","image/webp"].includes(file.type)){say("galleryStatus","Only JPG, PNG and WebP files are allowed.");return;}try{say("galleryStatus","Optimizing and uploading directly to public gallery…");const blob=await makeWebImage(file);const path=f.get("campus").toLowerCase().replaceAll(" ","-")+"/"+crypto.randomUUID()+".webp";const up=await db.storage.from(PUBLIC_BUCKET).upload(path,blob,{contentType:"image/webp",cacheControl:"31536000"});if(up.error)throw up.error;const{error}=await db.from("school_gallery").insert({campus:f.get("campus"),title:f.get("title"),alt_text:f.get("alt_text"),image_path:null,is_published:true,public_image_path:path});if(error){await db.storage.from(PUBLIC_BUCKET).remove([path]);throw error;}say("galleryStatus","Uploaded and published directly to the public gallery.");form.reset();await load();}catch(error){say("galleryStatus",error.message||"Upload failed.");}};
+$("eventForm").onsubmit=async e=>{e.preventDefault();const form=e.currentTarget;const f=new FormData(form),v=Object.fromEntries(f);v.event_date=v.event_date||null;v.is_published=false;const{error}=await db.from("school_events").insert(v);say("eventStatus",error?.message||"Event saved as draft.");if(!error){form.reset();await load();}};
 function localDateTime(value){if(!value)return "";const d=new Date(value);d.setMinutes(d.getMinutes()-d.getTimezoneOffset());return d.toISOString().slice(0,16);}
 function resetAnnouncementEditor(){const form=$("announcementForm");form.reset();$("announcementId").value="";$("announcementSaveButton").textContent="Save announcement draft";$("cancelAnnouncementEdit").hidden=true;}
 $("cancelAnnouncementEdit").addEventListener("click",resetAnnouncementEditor);
@@ -188,7 +188,7 @@ $("announcementsList").addEventListener("click",async event=>{
 });
 db.auth.onAuthStateChange(()=>session());session();
 $("passwordForm").onsubmit=async e=>{
- e.preventDefault();const f=new FormData(e.currentTarget),current=f.get("current_password"),next=f.get("new_password"),confirm=f.get("confirm_password");
+ e.preventDefault();const form=e.currentTarget;const f=new FormData(form),current=f.get("current_password"),next=f.get("new_password"),confirm=f.get("confirm_password");
  if(next.length<12){say("passwordStatus","Use at least 12 characters for the new password.");return;}
  if(next!==confirm){say("passwordStatus","New password and confirmation do not match.");return;}
  if(next===current){say("passwordStatus","Choose a different new password.");return;}
@@ -196,7 +196,7 @@ $("passwordForm").onsubmit=async e=>{
  say("passwordStatus","Verifying current password…");const verified=await db.auth.signInWithPassword({email:user.email,password:current});
  if(verified.error){say("passwordStatus","Current password is incorrect. Please try again.");return;}
  const updated=await db.auth.updateUser({password:next});if(updated.error){say("passwordStatus",updated.error.message);return;}
- e.currentTarget.reset();say("passwordStatus","Password updated successfully. Use the new password next time you sign in.");
+ form.reset();say("passwordStatus","Password updated successfully. Use the new password next time you sign in.");
 };
 
 
@@ -211,11 +211,12 @@ async function loadSchoolLogo(){
 }
 $("logoForm").onsubmit=async e=>{
  e.preventDefault();
+ const form=e.currentTarget;
  const file=$("schoolLogoFile").files[0];
  if(!file){say("logoStatus","Please choose a logo image.");return;}
  if(file.size>5*1024*1024){say("logoStatus","Logo must be 5 MB or smaller.");return;}
  if(!["image/jpeg","image/png","image/webp"].includes(file.type)){say("logoStatus","Only JPG, PNG and WebP files are allowed.");return;}
- const button=e.currentTarget.querySelector("button");button.disabled=true;
+ const button=form.querySelector("button");button.disabled=true;
  try{
   say("logoStatus","Uploading logo…");
   const old=await db.from("school_settings").select("logo_path").eq("id",1).maybeSingle();
@@ -228,7 +229,7 @@ $("logoForm").onsubmit=async e=>{
   if(saved.error){await db.storage.from(PUBLIC_BUCKET).remove([path]);throw saved.error;}
   if(old.data?.logo_path)await db.storage.from(PUBLIC_BUCKET).remove([old.data.logo_path]);
   await loadSchoolLogo();
-  e.currentTarget.reset();
+  form.reset();
   say("logoStatus","Logo updated. Refresh the public website to see the new logo.");
  }catch(error){say("logoStatus",error.message||"Logo upload failed.");}
  finally{button.disabled=false;}
