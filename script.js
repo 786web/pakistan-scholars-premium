@@ -198,8 +198,9 @@ if (resultSearch) {
       tbody.appendChild(row);
       });
       Array.from(tbody.rows).sort((a,b) => {
-        const score = row => Number((row.cells[3]?.textContent || "0").split("/")[0].replace(/,/g,"")) || 0;
-        return score(b)-score(a);
+        const yearA = Number(a.cells[0]?.textContent) || 0;
+        const yearB = Number(b.cells[0]?.textContent) || 0;
+        return yearA - yearB || (a.cells[1]?.textContent || "").localeCompare(b.cells[1]?.textContent || "");
       }).forEach(row => tbody.appendChild(row));
     }
 
