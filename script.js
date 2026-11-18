@@ -188,6 +188,10 @@ if (resultSearch) {
       if (!target) return;
       target.src = /^https:\/\//i.test(item.public_image_path) ? item.public_image_path : schoolDb.storage.from("school-gallery-public").getPublicUrl(item.public_image_path).data.publicUrl;
       if (item.alt_text) target.alt = item.alt_text;
+      if (item.title === "hero-campus") {
+        const showcase = target.closest(".hero-campus-showcase");
+        if (showcase) showcase.hidden = false;
+      }
     });
 
     // Public gallery only reads rows explicitly approved by the school admin.
