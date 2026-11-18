@@ -349,3 +349,24 @@ document.querySelectorAll(".profile-more-link").forEach((button) => {
     }, {once:true});
   });
 })();
+
+
+/* Published campus images: lightweight horizontal strip under the school name. */
+(async()=>{
+ const strip=document.getElementById("brandPhotoStrip");
+ if(!strip)return;
+ try{
+  const {createClient}=await import("https://esm.sh/@supabase/supabase-js@2.119.0");
+  const client=createClient("https://vuptztqeqblngbpflqzt.supabase.co","sb_publishable_fglLwYtA9GpLJdkwRc90Jw_dNw7TtK8");
+  const {data,error}=await client.from("school_gallery").select("title,campus,public_image_path,alt_text").eq("is_published",true).neq("campus","Website").not("public_image_path","is",null).order("created_at",{ascending:false}).limit(12);
+  if(error)throw error;
+  (data||[]).forEach(item=>{
+   const image=document.createElement("img");
+   image.src=/^https:\/\//i.test(item.public_image_path)?item.public_image_path:client.storage.from("school-gallery-public").getPublicUrl(item.public_image_path).data.publicUrl;
+   image.alt=item.alt_text||item.title||item.campus+" campus";
+   image.loading="lazy";image.decoding="async";
+   strip.appendChild(image);
+  });
+  if(data?.length){const hint=document.createElement("span");hint.className="brand-photo-count";hint.textContent="SWIPE ›";strip.appendChild(hint);}
+ }catch(error){console.warn("School photo ribbon unavailable:",error);}
+})();
