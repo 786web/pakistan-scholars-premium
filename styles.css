@@ -1740,3 +1740,21 @@ img:not([src]),img[src=""]{visibility:hidden}
 .hero-slide-dot.is-active{width:21px;border-radius:10px;background:#fff}
 @media(max-width:760px){.hero-slide-hit{width:23%;font-size:48px;opacity:.95}.hero-slide-dots{bottom:11px;gap:6px}.hero-slide-dot{width:7px;height:7px}.hero-slide-dot.is-active{width:18px}}
 @media(prefers-reduced-motion:reduce){.hero-slide-hit{transition:none}}
+
+
+/* Campus chooser for the floating WhatsApp contact button */
+.whatsapp-float{font-family:Arial,sans-serif;cursor:pointer;padding:0}
+.whatsapp-dialog-backdrop[hidden]{display:none!important}
+.whatsapp-dialog-backdrop{position:fixed;inset:0;z-index:1000;background:rgba(5,13,30,.62);display:grid;place-items:center;padding:20px;backdrop-filter:blur(5px)}
+.whatsapp-campus-dialog{position:relative;width:min(100%,420px);background:#fff;color:#253247;padding:34px 28px 28px;border-radius:22px;box-shadow:0 24px 80px rgba(0,0,0,.28)}
+.whatsapp-dialog-close{position:absolute;right:14px;top:10px;border:0;background:#eef2f8;color:#263b5e;width:34px;height:34px;border-radius:50%;font-size:24px;cursor:pointer}
+.whatsapp-dialog-kicker{font-size:9px;letter-spacing:.18em;font-weight:800;color:#8295b5}
+.whatsapp-campus-dialog h2{font-family:Georgia,serif;font-size:29px;color:#101d3a;margin:10px 0 7px}
+.whatsapp-campus-dialog>p{font-size:12px;line-height:1.7;color:#697587;margin:0 0 20px}
+.whatsapp-campus-option{display:flex;align-items:center;justify-content:space-between;padding:16px 17px;margin-top:11px;border:1px solid #dce2ec;border-radius:13px;background:#f8f9fc;transition:background .2s,border-color .2s}
+.whatsapp-campus-option:hover{background:#edf3fa;border-color:#9aabc5}
+.whatsapp-campus-option span{display:flex;flex-direction:column;gap:3px}
+.whatsapp-campus-option strong{font-size:13px;color:#101d3a}
+.whatsapp-campus-option small{font-size:11px;color:#697587}
+.whatsapp-campus-option b{font-size:19px;color:#168b59}
+@media(max-width:480px){.whatsapp-campus-dialog{padding:31px 20px 22px;border-radius:18px}.whatsapp-campus-dialog h2{font-size:26px}}
