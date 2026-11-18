@@ -1,6 +1,17 @@
 import{createClient}from"https://esm.sh/@supabase/supabase-js@2.119.0";
 const db=createClient("https://vuptztqeqblngbpflqzt.supabase.co","sb_publishable_fglLwYtA9GpLJdkwRc90Jw_dNw7TtK8");
 const PRIVATE_BUCKET="school-gallery",PUBLIC_BUCKET="school-gallery-public";
+async function makeWebImage(file){
+ const bitmap=await createImageBitmap(file);
+ const scale=Math.min(1,1600/Math.max(bitmap.width,bitmap.height));
+ const canvas=document.createElement("canvas");
+ canvas.width=Math.max(1,Math.round(bitmap.width*scale));canvas.height=Math.max(1,Math.round(bitmap.height*scale));
+ const ctx=canvas.getContext("2d",{alpha:false});
+ ctx.drawImage(bitmap,0,0,canvas.width,canvas.height);bitmap.close();
+ const blob=await new Promise(resolve=>canvas.toBlob(resolve,"image/webp",0.78));
+ if(!blob)throw new Error("Image compression failed. Please choose another photo.");
+ return blob;
+}
 const $=id=>document.getElementById(id),say=(id,msg)=>$(id).textContent=msg;
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 async function session(){const{data:{session}}=await db.auth.getSession();const ok=session?.user?.app_metadata?.role==="school_admin";$("login").hidden=!!ok;$("app").hidden=!ok;if(session&&!ok)say("loginStatus","Signed in, but this account does not have school_admin authorization.");if(ok)await load();}
@@ -50,9 +61,14 @@ async function publishGallery(id){
  say("galleryStatus","Preparing public copy…");
  const row=await getGalleryRow(id);
  if(!row.image_path)throw new Error("The private image file path is missing.");
+ if(row.public_image_path){
+  const{error}=await db.from("school_gallery").update({is_published:true}).eq("id",id);
+  if(error)throw error;
+  return;
+ }
  const downloaded=await db.storage.from(PRIVATE_BUCKET).download(row.image_path);
  if(downloaded.error)throw downloaded.error;
- const uploaded=await db.storage.from(PUBLIC_BUCKET).upload(row.image_path,downloaded.data,{upsert:true,contentType:downloaded.data.type||"image/jpeg",cacheControl:"60"});
+ const uploaded=await db.storage.from(PUBLIC_BUCKET).upload(row.image_path,downloaded.data,{upsert:true,contentType:downloaded.data.type||"image/jpeg",cacheControl:"31536000"});
  if(uploaded.error)throw uploaded.error;
  const{error}=await db.from("school_gallery").update({public_image_path:row.image_path,is_published:true}).eq("id",id);
  if(error){await db.storage.from(PUBLIC_BUCKET).remove([row.image_path]);throw error;}
@@ -61,11 +77,7 @@ async function publishGallery(id){
 async function unpublishGallery(id){
  say("galleryStatus","Removing photo from public gallery…");
  const row=await getGalleryRow(id);
- if(row.public_image_path){
-  const removed=await db.storage.from(PUBLIC_BUCKET).remove([row.public_image_path]);
-  if(removed.error)throw removed.error;
- }
- const{error}=await db.from("school_gallery").update({is_published:false,public_image_path:null}).eq("id",id);
+ const{error}=await db.from("school_gallery").update({is_published:false}).eq("id",id);
  if(error)throw error;
  say("galleryStatus","Unpublished. The photo is no longer listed in the public gallery.");
 }
@@ -98,13 +110,15 @@ $("mediaForm").onsubmit=async e=>{
  e.preventDefault();const f=new FormData(e.currentTarget),file=f.get("photo"),slot=f.get("slot");
  if(!file||file.size>8*1024*1024){say("mediaStatus","Select an image up to 8 MB.");return;}
  if(!["image/jpeg","image/png","image/webp"].includes(file.type)){say("mediaStatus","Only JPG, PNG and WebP are allowed.");return;}
- const ext=file.name.split(".").pop().toLowerCase(),path="website/"+slot+"/"+crypto.randomUUID()+"."+ext;
- say("mediaStatus","Uploading private image…");
- const up=await db.storage.from(PRIVATE_BUCKET).upload(path,file,{contentType:file.type});
- if(up.error){say("mediaStatus",up.error.message);return;}
- const{error}=await db.from("school_gallery").insert({campus:"Website",title:slot,alt_text:f.get("alt_text")||slot.replaceAll("-"," "),image_path:path,is_published:false,public_image_path:null});
- if(error){await db.storage.from(PRIVATE_BUCKET).remove([path]);say("mediaStatus",error.message);return;}
- e.currentTarget.reset();say("mediaStatus","Uploaded as private draft. Publish it below to replace the live website image.");await loadMedia();
+ try{
+  say("mediaStatus","Optimizing and uploading directly to public website storage…");
+  const blob=await makeWebImage(file),path="website/"+slot+"/"+crypto.randomUUID()+".webp";
+  const up=await db.storage.from(PUBLIC_BUCKET).upload(path,blob,{contentType:"image/webp",cacheControl:"31536000"});
+  if(up.error)throw up.error;
+  const{error}=await db.from("school_gallery").insert({campus:"Website",title:slot,alt_text:f.get("alt_text")||slot.replaceAll("-"," "),image_path:null,is_published:true,public_image_path:path});
+  if(error){await db.storage.from(PUBLIC_BUCKET).remove([path]);throw error;}
+  e.currentTarget.reset();say("mediaStatus","Uploaded and published. The website image is now live.");await loadMedia();
+ }catch(error){say("mediaStatus",error.message||"Upload failed.");}
 };
 $("mediaList").addEventListener("click",async event=>{
  const button=event.target.closest("[data-media-action]");if(!button)return;
@@ -125,7 +139,7 @@ $("mediaList").addEventListener("click",async event=>{
 
 
 $("resultForm").onsubmit=async e=>{e.preventDefault();const f=new FormData(e.currentTarget),v=Object.fromEntries(f);["year","marks_obtained","total_marks"].forEach(k=>v[k]=Number(v[k]));v.is_published=false;const{error}=await db.from("school_results").insert(v);say("resultStatus",error?.message||"Saved as draft. Review before publishing.");if(!error){e.currentTarget.reset();await load();}};
-$("galleryForm").onsubmit=async e=>{e.preventDefault();const f=new FormData(e.currentTarget),file=f.get("photo");if(!file||file.size>8*1024*1024){say("galleryStatus","Select an image up to 8 MB.");return;}if(!["image/jpeg","image/png","image/webp"].includes(file.type)){say("galleryStatus","Only JPG, PNG and WebP files are allowed.");return;}const ext=file.name.split(".").pop().toLowerCase();const path=f.get("campus").toLowerCase().replaceAll(" ","-")+"/"+crypto.randomUUID()+"."+ext;say("galleryStatus","Uploading privately…");const up=await db.storage.from(PRIVATE_BUCKET).upload(path,file,{contentType:file.type});if(up.error){say("galleryStatus",up.error.message);return;}const{error}=await db.from("school_gallery").insert({campus:f.get("campus"),title:f.get("title"),alt_text:f.get("alt_text"),image_path:path,is_published:false,public_image_path:null});say("galleryStatus",error?.message||"Uploaded privately as a draft. Press Publish only after school approval.");if(!error){e.currentTarget.reset();await load();}};
+$("galleryForm").onsubmit=async e=>{e.preventDefault();const f=new FormData(e.currentTarget),file=f.get("photo");if(!file||file.size>8*1024*1024){say("galleryStatus","Select an image up to 8 MB.");return;}if(!["image/jpeg","image/png","image/webp"].includes(file.type)){say("galleryStatus","Only JPG, PNG and WebP files are allowed.");return;}try{say("galleryStatus","Optimizing and uploading directly to public gallery…");const blob=await makeWebImage(file);const path=f.get("campus").toLowerCase().replaceAll(" ","-")+"/"+crypto.randomUUID()+".webp";const up=await db.storage.from(PUBLIC_BUCKET).upload(path,blob,{contentType:"image/webp",cacheControl:"31536000"});if(up.error)throw up.error;const{error}=await db.from("school_gallery").insert({campus:f.get("campus"),title:f.get("title"),alt_text:f.get("alt_text"),image_path:null,is_published:true,public_image_path:path});if(error){await db.storage.from(PUBLIC_BUCKET).remove([path]);throw error;}say("galleryStatus","Uploaded and published directly to the public gallery.");e.currentTarget.reset();await load();}catch(error){say("galleryStatus",error.message||"Upload failed.");}};
 $("eventForm").onsubmit=async e=>{e.preventDefault();const f=new FormData(e.currentTarget),v=Object.fromEntries(f);v.event_date=v.event_date||null;v.is_published=false;const{error}=await db.from("school_events").insert(v);say("eventStatus",error?.message||"Event saved as draft.");if(!error){e.currentTarget.reset();await load();}};
 function localDateTime(value){if(!value)return "";const d=new Date(value);d.setMinutes(d.getMinutes()-d.getTimezoneOffset());return d.toISOString().slice(0,16);}
 function resetAnnouncementEditor(){const form=$("announcementForm");form.reset();$("announcementId").value="";$("announcementSaveButton").textContent="Save announcement draft";$("cancelAnnouncementEdit").hidden=true;}
