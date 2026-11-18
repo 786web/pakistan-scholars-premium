@@ -197,6 +197,7 @@ if (resultSearch) {
         .from("school_gallery")
         .select("id, campus, title, alt_text, public_image_path")
         .eq("is_published", true)
+        .neq("campus", "Website")
         .not("public_image_path", "is", null)
         .order("created_at", { ascending: false });
       if (galleryError) throw galleryError;
