@@ -1724,3 +1724,6 @@ img:not([src]),img[src=""]{visibility:hidden}
  .published-gallery-card img{min-height:140px}
 }
 @media(prefers-reduced-motion:reduce){.content-more-btn{transition:none}}
+
+
+.hero-campus-showcase[hidden]{display:none!important}
