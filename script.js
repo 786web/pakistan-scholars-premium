@@ -177,6 +177,19 @@ if (resultSearch) {
       }).forEach(row => tbody.appendChild(row));
     }
 
+    // Apply admin-managed image replacements to fixed website image positions.
+    const { data: managedMedia, error: mediaError } = await schoolDb
+      .from("school_gallery").select("title, public_image_path, alt_text")
+      .eq("campus", "Website").eq("is_published", true)
+      .not("public_image_path", "is", null);
+    if (mediaError) throw mediaError;
+    (managedMedia || []).forEach((item) => {
+      const target = document.querySelector('[data-media-slot="' + CSS.escape(item.title) + '"]');
+      if (!target) return;
+      target.src = /^https:\/\//i.test(item.public_image_path) ? item.public_image_path : schoolDb.storage.from("school-gallery-public").getPublicUrl(item.public_image_path).data.publicUrl;
+      if (item.alt_text) target.alt = item.alt_text;
+    });
+
     // Public gallery only reads rows explicitly approved by the school admin.
     const galleryGrid = document.getElementById("publishedGalleryGrid");
     if (galleryGrid) {
