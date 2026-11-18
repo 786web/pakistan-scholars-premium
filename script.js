@@ -177,21 +177,63 @@ if (resultSearch) {
       }).forEach(row => tbody.appendChild(row));
     }
 
-    // Apply admin-managed image replacements to fixed website image positions.
+    // Load every published hero-campus photo as a touch-friendly carousel.
     const { data: managedMedia, error: mediaError } = await schoolDb
-      .from("school_gallery").select("title, public_image_path, alt_text")
+      .from("school_gallery").select("title, public_image_path, alt_text, created_at")
       .eq("campus", "Website").eq("is_published", true)
-      .not("public_image_path", "is", null);
+      .not("public_image_path", "is", null)
+      .order("created_at", { ascending: true });
     if (mediaError) throw mediaError;
-    (managedMedia || []).forEach((item) => {
+    const heroPhotos = (managedMedia || []).filter(item => item.title === "hero-campus");
+    const heroShowcase = document.querySelector(".hero-campus-showcase");
+    const heroImage = document.querySelector('[data-media-slot="hero-campus"]');
+    if (heroShowcase && heroImage && heroPhotos.length) {
+      const heroUrls = heroPhotos.map(item => ({
+        src: /^https:\/\//i.test(item.public_image_path) ? item.public_image_path : schoolDb.storage.from("school-gallery-public").getPublicUrl(item.public_image_path).data.publicUrl,
+        alt: item.alt_text || "Pakistan Scholars campus photograph"
+      }));
+      const dots = document.getElementById("heroSlideDots");
+      const counter = heroShowcase.querySelector(".showcase-caption small");
+      const caption = heroShowcase.querySelector(".showcase-caption span");
+      const previous = heroShowcase.querySelector(".hero-slide-prev");
+      const next = heroShowcase.querySelector(".hero-slide-next");
+      let current = 0;
+      const showHeroPhoto = (index) => {
+        current = (index + heroUrls.length) % heroUrls.length;
+        heroImage.src = heroUrls[current].src;
+        heroImage.alt = heroUrls[current].alt;
+        if (counter) counter.textContent = String(current + 1).padStart(2,"0") + " / " + String(heroUrls.length).padStart(2,"0");
+        if (caption) caption.textContent = "PAKISTAN SCHOLARS • SCHOOL GALLERY";
+        if (dots) {
+          dots.replaceChildren();
+          heroUrls.forEach((photo, dotIndex) => {
+            const dot = document.createElement("button");
+            dot.type = "button";
+            dot.className = "hero-slide-dot" + (dotIndex === current ? " is-active" : "");
+            dot.setAttribute("aria-label", "Show photo " + (dotIndex + 1));
+            dot.setAttribute("aria-current", dotIndex === current ? "true" : "false");
+            dot.addEventListener("click", () => showHeroPhoto(dotIndex));
+            dots.appendChild(dot);
+          });
+        }
+      };
+      previous?.addEventListener("click", () => showHeroPhoto(current - 1));
+      next?.addEventListener("click", () => showHeroPhoto(current + 1));
+      let touchStartX = 0;
+      const frame = heroImage.closest(".showcase-frame");
+      frame?.addEventListener("touchstart", event => { touchStartX = event.changedTouches[0].clientX; }, { passive: true });
+      frame?.addEventListener("touchend", event => {
+        const delta = event.changedTouches[0].clientX - touchStartX;
+        if (Math.abs(delta) > 42) showHeroPhoto(current + (delta < 0 ? 1 : -1));
+      }, { passive: true });
+      showHeroPhoto(0);
+      heroShowcase.hidden = false;
+    }
+    (managedMedia || []).filter(item => item.title !== "hero-campus").forEach((item) => {
       const target = document.querySelector('[data-media-slot="' + CSS.escape(item.title) + '"]');
       if (!target) return;
       target.src = /^https:\/\//i.test(item.public_image_path) ? item.public_image_path : schoolDb.storage.from("school-gallery-public").getPublicUrl(item.public_image_path).data.publicUrl;
       if (item.alt_text) target.alt = item.alt_text;
-      if (item.title === "hero-campus") {
-        const showcase = target.closest(".hero-campus-showcase");
-        if (showcase) showcase.hidden = false;
-      }
     });
 
     // Public gallery only reads rows explicitly approved by the school admin.
