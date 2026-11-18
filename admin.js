@@ -10,7 +10,6 @@ document.querySelectorAll("[data-tab]").forEach(b=>b.onclick=()=>{document.query
 async function load(){
  await loadSchoolLogo();
  await loadMedia();
- await loadMedia();
  const [r,g,e,a]=await Promise.all([
   db.from("school_results").select("*").order("year",{ascending:false}),
   db.from("school_gallery").select("*").order("created_at",{ascending:false}),
