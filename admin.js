@@ -81,12 +81,18 @@ async function deleteGallery(id){
 async function loadMedia(){
  const{data,error}=await db.from("school_gallery").select("*").eq("campus","Website").order("created_at",{ascending:false});
  if(error){say("mediaStatus",error.message);return;}
- $("mediaList").innerHTML='<table><tr><th>Position</th><th>Preview</th><th>Status</th><th>Actions</th></tr>'+(data||[]).map(x=>{
-  const url=x.public_image_path?db.storage.from(PUBLIC_BUCKET).getPublicUrl(x.public_image_path).data.publicUrl:x.image_path?db.storage.from(PRIVATE_BUCKET).getPublicUrl(x.image_path).data.publicUrl:null;
-  const preview=url?'<a href="'+esc(url)+'" target="_blank" rel="noopener">View image</a>':'—';
-  const actions=(x.is_published?'<button class="btn small" data-media-action="unpublish" data-id="'+x.id+'">Unpublish</button>':'<button class="btn small" data-media-action="publish" data-id="'+x.id+'">Publish</button>')+' <button class="btn small danger" data-media-action="delete" data-id="'+x.id+'">Delete</button>';
-  return '<tr><td>'+esc(x.title)+'</td><td>'+preview+'</td><td>'+(x.is_published?'Published':'Private draft')+'</td><td class="gallery-actions">'+actions+'</td></tr>';
- }).join("")+'</table>'+(data?.length?"":"<p>No website image replacements uploaded yet.</p>");
+ const rows=await Promise.all((data||[]).map(async x=>{
+  let url=null;
+  if(x.public_image_path)url=db.storage.from(PUBLIC_BUCKET).getPublicUrl(x.public_image_path).data.publicUrl;
+  else if(x.image_path){
+   const{data:signed,error:signedError}=await db.storage.from(PRIVATE_BUCKET).createSignedUrl(x.image_path,3600);
+   if(!signedError)url=signed?.signedUrl||null;
+  }
+  const preview=url?'<a href="'+esc(url)+'" target="_blank" rel="noopener">View image</a>':'Preview unavailable';
+  const actions=(x.is_published?'<button class="btn small" data-media-action="unpublish" data-id="'+x.id+'">Unpublish</button>':'<button class="btn small" data-media-action="publish" data-id="'+x.id+'">Publish to website</button>')+' <button class="btn small danger" data-media-action="delete" data-id="'+x.id+'">Delete</button>';
+  return '<tr><td>'+esc(x.title)+'</td><td>'+preview+'</td><td>'+(x.is_published?'Published':'Uploaded — draft, not live yet')+'</td><td class="gallery-actions">'+actions+'</td></tr>';
+ }));
+ $("mediaList").innerHTML='<table><tr><th>Position</th><th>Preview</th><th>Status</th><th>Actions</th></tr>'+rows.join("")+'</table>'+(data?.length?"":"<p>No website image replacements uploaded yet.</p>");
 }
 $("mediaForm").onsubmit=async e=>{
  e.preventDefault();const f=new FormData(e.currentTarget),file=f.get("photo"),slot=f.get("slot");
