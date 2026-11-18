@@ -60,12 +60,12 @@ async function getGalleryRow(id){
 async function publishGallery(id){
  say("galleryStatus","Preparing public copy…");
  const row=await getGalleryRow(id);
- if(!row.image_path)throw new Error("The private image file path is missing.");
  if(row.public_image_path){
   const{error}=await db.from("school_gallery").update({is_published:true}).eq("id",id);
   if(error)throw error;
   return;
  }
+ if(!row.image_path)throw new Error("The image file path is missing.");
  const downloaded=await db.storage.from(PRIVATE_BUCKET).download(row.image_path);
  if(downloaded.error)throw downloaded.error;
  const uploaded=await db.storage.from(PUBLIC_BUCKET).upload(row.image_path,downloaded.data,{upsert:true,contentType:downloaded.data.type||"image/jpeg",cacheControl:"31536000"});
