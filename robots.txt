@@ -1,5 +1,6 @@
 User-agent: *
 Allow: /
+Disallow: /admin.html
 
 Sitemap: https://pakistan-scholars-premium.vercel.app/sitemap.xml
 Sitemap: https://pakistan-scholars-premium.vercel.app/sitemap1.xml
